@@ -136,6 +136,16 @@ def visualize_tip_distribution(merged_data):
     plt.title('Distribution of Tips in Different Price Ranges')
     plt.xticks(rotation=45)
     plt.show()
+
+    def visualize_predictions(X_test, y_test, predictions):
+        plt.figure(figsize=(10, 6))
+        plt.scatter(X_test['Subtotal_amount_USD'], y_test, color='blue', label='Actual')
+        plt.scatter(X_test['Subtotal_amount_USD'], predictions, color='red', label='Predicted')
+        plt.xlabel('Subtotal Amount (USD)')
+        plt.ylabel('Tip (USD)')
+        plt.title('Actual vs. Predicted Tips')
+        plt.legend()
+        plt.show()
 def main(visualize=True, save_artifacts=False):
     order_data, store_data = load_data()
     merged_data = preprocess_data(order_data, store_data)
@@ -153,6 +163,7 @@ def main(visualize=True, save_artifacts=False):
     if visualize:
         visualize_tip_distribution(merged_data)
         visualize_correlation(merged_data)
+        visualize_predictions(X_test, y_test, predictions)
         # Additional visualization for linear regression can be added here.
 
 if __name__ == "__main__":
