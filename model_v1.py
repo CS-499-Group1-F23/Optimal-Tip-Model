@@ -2,6 +2,7 @@
 import os
 from datetime import datetime
 import pandas as pd
+import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
@@ -12,23 +13,66 @@ import matplotlib.pyplot as plt
 def load_data():
     #order_data = pd.read_csv('Data/order-initial-dataset.csv')
     order_data = pd.read_csv('Data/order_data_10-16.csv')
-    store_data = pd.read_csv('Data/store-initial-dataset.csv')
+    store_data = pd.read_csv('Data/store_data_10-16.csv')
     return order_data, store_data
 
 
-def preprocess_data(order_data, store_data):
+def preprocess_data(order_data, store_data, tip_percentage):
     order_data = order_data[order_data['Destination_type'] == 'Delivery'] #Drop non Delivery orders
     order_data = order_data[~order_data['Source_actor'].isin(['ubereats', 'doordash', 'grubhub'])] # Drop 3rd party aggregetors
-    merged_data = pd.merge(order_data, store_data, on='Store_dma_id', how='inner') # Merge two datapoints using Store_dma_id as primary_key
+    merged_data = pd.merge(order_data, store_data, on='store_number', how='inner') # Merge two datapoints using Store_dma_id as primary_key
+    merged_data['total_amount_USD'] = merged_data['total_tax_USD'] + merged_data['subtotal_amount_USD'] # Sum post tax
+    merged_data['good_tip'] = merged_data.apply(lambda row: 'TRUE' if row['Tip_USD'] > tip_percentage * row['total_amount_USD'] else ('ZERO' if row['Tip_USD'] == 0 else 'FALSE'), axis=1) # Get good tip 
+    
+    total_rows = len(merged_data)
+    good_tip_percentage = len(merged_data[merged_data['good_tip'] == 'TRUE']) / total_rows * 100
+    bad_tip_percentage = len(merged_data[merged_data['good_tip'] == 'FALSE']) / total_rows * 100
+    zero_tip_percentage = len(merged_data[merged_data['good_tip'] == 'ZERO']) / total_rows * 100
+    print(f"Percentage of good tip data: {good_tip_percentage:.2f}%")
+    print(f"Percentage of bad tip data: {bad_tip_percentage:.2f}%")
+    print(f"Percentage of zero tip data: {zero_tip_percentage:.2f}%")
+    print(merged_data.size)
     return merged_data
 
-def data_loader(merged_data, test_size=0.2, percentage_zero_dollar_tip=0.1):
+import numpy as np
+
+def data_loader(merged_data, test_size, percentage_zero_dollar_tip, percentage_bad_tip=None, percentage_good_tip=None):
     if percentage_zero_dollar_tip > merged_data['Tip_USD'].value_counts(normalize=True).get(0, 0):
         raise ValueError("Invalid percentage. Not enough data points with zero tips.")
-    X = merged_data[['Store_dma_id', 'subtotal_amount_USD']]
+    
+    # Filter data based on percentage of zero tips
+    zero_tip_mask = merged_data['Tip_USD'] == 0
+    zero_tip_indices = zero_tip_mask.index.to_numpy()
+    np.random.shuffle(zero_tip_indices)
+    num_zero_tips_to_keep = int(percentage_zero_dollar_tip * len(zero_tip_indices))
+    zero_tip_indices_to_keep = zero_tip_indices[:num_zero_tips_to_keep]
+    merged_data = merged_data.loc[zero_tip_indices_to_keep]
+
+    # Filter data based on percentage of bad tips
+    if percentage_bad_tip:
+        bad_tip_mask = merged_data['good_tip'] == 'FALSE'
+        bad_tip_indices = bad_tip_mask.index.to_numpy()
+        np.random.shuffle(bad_tip_indices)
+        num_bad_tips_to_keep = int(percentage_bad_tip * len(bad_tip_indices))
+        bad_tip_indices_to_keep = bad_tip_indices[:num_bad_tips_to_keep]
+        merged_data = merged_data.loc[bad_tip_indices_to_keep]
+
+    # Filter data based on percentage of good tips
+    if percentage_good_tip:
+        good_tip_mask = merged_data['good_tip'] == 'TRUE'
+        good_tip_indices = good_tip_mask.index.to_numpy()
+        np.random.shuffle(good_tip_indices)
+        num_good_tips_to_keep = int(percentage_good_tip * len(good_tip_indices))
+        good_tip_indices_to_keep = good_tip_indices[:num_good_tips_to_keep]
+        merged_data = merged_data.loc[good_tip_indices_to_keep]
+
+    X = merged_data[['store_number', 'subtotal_amount_USD']]
     y = merged_data['Tip_USD']
+    print(len(X), len(y))
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
     return X_train, X_test, y_train, y_test
+
+
 
 def train_model(X_train, X_test, y_train, y_test):
     model = LinearRegression()
@@ -137,19 +181,23 @@ def visualize_tip_distribution(merged_data):
     plt.xticks(rotation=45)
     plt.show()
 
-    def visualize_predictions(X_test, y_test, predictions):
-        plt.figure(figsize=(10, 6))
-        plt.scatter(X_test['Subtotal_amount_USD'], y_test, color='blue', label='Actual')
-        plt.scatter(X_test['Subtotal_amount_USD'], predictions, color='red', label='Predicted')
-        plt.xlabel('Subtotal Amount (USD)')
-        plt.ylabel('Tip (USD)')
-        plt.title('Actual vs. Predicted Tips')
-        plt.legend()
-        plt.show()
+def visualize_predictions(X_test, y_test, predictions):
+    plt.figure(figsize=(10, 6))
+    plt.scatter(X_test['subtotal_amount_USD'], y_test, color='blue', label='Actual')
+    plt.scatter(X_test['subtotal_amount_USD'], predictions, color='red', label='Predicted')
+    plt.xlabel('Subtotal Amount (USD)')
+    plt.ylabel('Tip (USD)')
+    plt.title('Actual vs. Predicted Tips 50:50:0 (GoodTip:BadTip:ZeroTip)')
+    plt.legend()
+    plt.show()
+
+
+
 def main(visualize=True, save_artifacts=False):
     order_data, store_data = load_data()
-    merged_data = preprocess_data(order_data, store_data)
-    X_train, X_test, y_train, y_test = data_loader(merged_data, test_size=0.2, percentage_zero_dollar_tip=0.1)
+    merged_data = preprocess_data(order_data, store_data, tip_percentage = 0.12)
+    X_train, X_test, y_train, y_test = data_loader(merged_data, test_size=0.2, 
+                                                   percentage_zero_dollar_tip=0.2, percentage_bad_tip=.4, percentage_good_tip=.4)
     model, accuracy = train_model(X_train, X_test, y_train, y_test)
     print(f'Model Accuracy: {accuracy:.2f}')
 
@@ -161,8 +209,9 @@ def main(visualize=True, save_artifacts=False):
         print(f"Merged data saved as '{file_name}'.")
 
     if visualize:
-        visualize_tip_distribution(merged_data)
-        visualize_correlation(merged_data)
+        # visualize_tip_distribution(merged_data)
+        # visualize_correlation(merged_data)
+        predictions = model.predict(X_test)
         visualize_predictions(X_test, y_test, predictions)
         # Additional visualization for linear regression can be added here.
 
