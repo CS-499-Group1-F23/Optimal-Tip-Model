@@ -1,0 +1,81 @@
+2023-11-02 16:47:06,282 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.2, percentage_bad_tip: 0.4, percentage_good_tip: 0.4
+2023-11-02 16:50:12,202 - INFO - Percentage of good tip data: 42.40%
+2023-11-02 16:50:12,203 - INFO - Percentage of bad tip data: 9.88%
+2023-11-02 16:50:12,203 - INFO - Percentage of zero tip data: 47.73%
+2023-11-02 16:50:12,203 - INFO - data size 1083522
+2023-11-02 16:50:12,204 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.2, percentage_bad_tip: 0.4, percentage_good_tip: 0.4
+2023-11-02 16:50:12,216 - INFO - Model Accuracy: -0.24
+2023-11-02 16:50:18,684 - INFO - Percentage of good tip data: 42.40%
+2023-11-02 16:50:18,685 - INFO - Percentage of bad tip data: 9.88%
+2023-11-02 16:50:18,685 - INFO - Percentage of zero tip data: 47.73%
+2023-11-02 16:50:18,685 - INFO - data size 1083522
+2023-11-02 16:50:18,685 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.2, percentage_bad_tip: 0.4, percentage_good_tip: 0.4
+2023-11-02 16:50:18,694 - INFO - Model Accuracy: 0.58
+2023-11-02 16:51:09,571 - INFO - Percentage of good tip data: 42.40%
+2023-11-02 16:51:09,571 - INFO - Percentage of bad tip data: 9.88%
+2023-11-02 16:51:09,571 - INFO - Percentage of zero tip data: 47.73%
+2023-11-02 16:51:09,571 - INFO - data size 1083522
+2023-11-02 16:51:09,571 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.2, percentage_bad_tip: None, percentage_good_tip: None
+2023-11-02 16:51:09,583 - INFO - Model Accuracy: 0.20
+2023-11-02 16:51:16,762 - INFO - Percentage of good tip data: 42.40%
+2023-11-02 16:51:16,762 - INFO - Percentage of bad tip data: 9.88%
+2023-11-02 16:51:16,762 - INFO - Percentage of zero tip data: 47.73%
+2023-11-02 16:51:16,762 - INFO - data size 1083522
+2023-11-02 16:51:16,763 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.2, percentage_bad_tip: None, percentage_good_tip: None
+2023-11-02 16:51:16,769 - INFO - Model Accuracy: 0.43
+2023-11-02 16:53:15,944 - INFO - Percentage of good tip data: 42.40%
+2023-11-02 16:53:15,944 - INFO - Percentage of bad tip data: 9.88%
+2023-11-02 16:53:15,944 - INFO - Percentage of zero tip data: 47.73%
+2023-11-02 16:53:15,944 - INFO - data size 1083522
+2023-11-02 16:53:15,945 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.2, percentage_bad_tip: None, percentage_good_tip: None
+2023-11-02 16:53:15,957 - INFO - Model Accuracy: 0.43
+2023-11-02 16:55:03,487 - INFO - Percentage of good tip data: 42.40%
+2023-11-02 16:55:03,487 - INFO - Percentage of bad tip data: 9.88%
+2023-11-02 16:55:03,487 - INFO - Percentage of zero tip data: 47.73%
+2023-11-02 16:55:03,487 - INFO - data size 1083522
+2023-11-02 16:55:03,488 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.2, percentage_bad_tip: None, percentage_good_tip: None
+2023-11-02 16:55:03,494 - INFO - Model Accuracy: 0.03
+2023-11-02 16:56:20,996 - INFO - Percentage of good tip data: 42.40%
+2023-11-02 16:56:20,997 - INFO - Percentage of bad tip data: 9.88%
+2023-11-02 16:56:20,997 - INFO - Percentage of zero tip data: 47.73%
+2023-11-02 16:56:20,998 - INFO - data size 1083522
+2023-11-02 16:56:20,998 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.2, percentage_bad_tip: None, percentage_good_tip: None
+2023-11-02 16:56:21,016 - INFO - Model Accuracy: 0.37
+2023-11-02 16:56:45,215 - INFO - Percentage of good tip data: 42.40%
+2023-11-02 16:56:45,216 - INFO - Percentage of bad tip data: 9.88%
+2023-11-02 16:56:45,216 - INFO - Percentage of zero tip data: 47.73%
+2023-11-02 16:56:45,216 - INFO - data size 1083522
+2023-11-02 17:02:52,252 - INFO - Percentage of good tip data: 42.40%
+2023-11-02 17:02:52,253 - INFO - Percentage of bad tip data: 9.88%
+2023-11-02 17:02:52,253 - INFO - Percentage of zero tip data: 47.73%
+2023-11-02 17:02:52,253 - INFO - data size 1083522
+2023-11-02 17:02:52,254 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.2, percentage_bad_tip: None, percentage_good_tip: None
+2023-11-02 17:02:52,266 - INFO - Model Accuracy: 0.64
+2023-11-02 17:02:57,981 - INFO - Percentage of good tip data: 42.40%
+2023-11-02 17:02:57,981 - INFO - Percentage of bad tip data: 9.88%
+2023-11-02 17:02:57,981 - INFO - Percentage of zero tip data: 47.73%
+2023-11-02 17:02:57,981 - INFO - data size 1083522
+2023-11-02 17:02:57,981 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.2, percentage_bad_tip: None, percentage_good_tip: None
+2023-11-02 17:02:57,987 - INFO - Model Accuracy: 0.39
+2023-11-02 17:03:34,995 - INFO - Percentage of good tip data: 42.40%
+2023-11-02 17:03:34,998 - INFO - Percentage of bad tip data: 9.88%
+2023-11-02 17:03:34,998 - INFO - Percentage of zero tip data: 47.73%
+2023-11-02 17:03:34,998 - INFO - data size 1083522
+2023-11-02 17:03:34,999 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.2, percentage_bad_tip: None, percentage_good_tip: None
+2023-11-02 17:03:35,010 - INFO - Model Accuracy: -0.27
+2023-11-02 17:03:36,963 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2023-11-02 17:03:36,964 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2023-11-02 17:13:46,242 - INFO - Percentage of good tip data: 42.40%
+2023-11-02 17:13:46,242 - INFO - Percentage of bad tip data: 9.88%
+2023-11-02 17:13:46,242 - INFO - Percentage of zero tip data: 47.73%
+2023-11-02 17:13:46,242 - INFO - data size 1083522
+2023-11-02 17:13:46,242 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.2, percentage_bad_tip: None, percentage_good_tip: None
+2023-11-02 17:13:46,249 - INFO - Model Accuracy: 0.63
+2023-11-02 17:14:06,184 - INFO - Percentage of good tip data: 42.40%
+2023-11-02 17:14:06,185 - INFO - Percentage of bad tip data: 9.88%
+2023-11-02 17:14:06,185 - INFO - Percentage of zero tip data: 47.73%
+2023-11-02 17:14:06,185 - INFO - data size 1083522
+2023-11-02 17:14:06,186 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.2, percentage_bad_tip: None, percentage_good_tip: None
+2023-11-02 17:14:06,196 - INFO - Model Accuracy: 0.22
+2023-11-02 17:14:08,145 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2023-11-02 17:14:08,146 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.

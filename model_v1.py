@@ -8,11 +8,17 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
 import seaborn as sns
 import matplotlib.pyplot as plt
+import logging
+
+
+# Set up logging configuration
+logging.basicConfig(filename='Data/log.txt', level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
 
 # load the dataset
 def load_data():
     #order_data = pd.read_csv('Data/order-initial-dataset.csv')
-    order_data = pd.read_csv('Data/order_data_10-16.csv')
+    order_data = pd.read_csv('Data/order_data_10-30.csv')
     store_data = pd.read_csv('Data/store_data_10-16.csv')
     return order_data, store_data
 
@@ -31,12 +37,20 @@ def preprocess_data(order_data, store_data, tip_percentage):
     print(f"Percentage of good tip data: {good_tip_percentage:.2f}%")
     print(f"Percentage of bad tip data: {bad_tip_percentage:.2f}%")
     print(f"Percentage of zero tip data: {zero_tip_percentage:.2f}%")
-    print(merged_data.size)
+    print("data size", merged_data.size)
+    logging.info(f"Percentage of good tip data: {good_tip_percentage:.2f}%")
+    logging.info(f"Percentage of bad tip data: {bad_tip_percentage:.2f}%")
+    logging.info(f"Percentage of zero tip data: {zero_tip_percentage:.2f}%")
+    logging.info("data size %d", merged_data.size)
     return merged_data
 
 import numpy as np
 
 def data_loader(merged_data, test_size, percentage_zero_dollar_tip, percentage_bad_tip=None, percentage_good_tip=None):
+    logging.info(f'data_loader parameters - test_size: {test_size}, '
+                 f'percentage_zero_dollar_tip: {percentage_zero_dollar_tip}, '
+                 f'percentage_bad_tip: {percentage_bad_tip}, '
+                 f'percentage_good_tip: {percentage_good_tip}')
     if percentage_zero_dollar_tip > merged_data['Tip_USD'].value_counts(normalize=True).get(0, 0):
         raise ValueError("Invalid percentage. Not enough data points with zero tips.")
     
@@ -170,13 +184,13 @@ def visualize_tip_distribution(merged_data):
 
     # Calculate the percentage of tips in each range
     total_tips = len(merged_data)
-    tip_percentages = [count / total_tips * 100 for count in tip_counts]
+    tip_percentages = merged_data
 
     # Create the bar chart
     plt.figure(figsize=(10, 6))
     plt.bar([f"${tip_ranges[i - 1]}-{tip_ranges[i]}" for i in range(1, len(tip_ranges))], tip_percentages[:-1])
     plt.xlabel('Tip Range (USD)')
-    plt.ylabel('Percentage of Tips')
+    plt.ylabel('Rack Time')
     plt.title('Distribution of Tips in Different Price Ranges')
     plt.xticks(rotation=45)
     plt.show()
@@ -197,9 +211,12 @@ def main(visualize=True, save_artifacts=False):
     order_data, store_data = load_data()
     merged_data = preprocess_data(order_data, store_data, tip_percentage = 0.12)
     X_train, X_test, y_train, y_test = data_loader(merged_data, test_size=0.2, 
-                                                   percentage_zero_dollar_tip=0.2, percentage_bad_tip=.4, percentage_good_tip=.4)
+                                                   percentage_zero_dollar_tip=0.2)
+                                                   
     model, accuracy = train_model(X_train, X_test, y_train, y_test)
     print(f'Model Accuracy: {accuracy:.2f}')
+    logging.info(f'Model Accuracy: {accuracy:.2f}')
+
 
     if save_artifacts:
         # Save merged_data to a CSV file with the specified naming convention
@@ -209,7 +226,7 @@ def main(visualize=True, save_artifacts=False):
         print(f"Merged data saved as '{file_name}'.")
 
     if visualize:
-        # visualize_tip_distribution(merged_data)
+        visualize_tip_distribution(merged_data)
         # visualize_correlation(merged_data)
         predictions = model.predict(X_test)
         visualize_predictions(X_test, y_test, predictions)
