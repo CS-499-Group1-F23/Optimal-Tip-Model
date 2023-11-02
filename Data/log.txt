@@ -79,3 +79,27 @@
 2023-11-02 17:14:06,196 - INFO - Model Accuracy: 0.22
 2023-11-02 17:14:08,145 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
 2023-11-02 17:14:08,146 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2023-11-02 17:32:06,351 - INFO - Percentage of good tip data: 42.40%
+2023-11-02 17:32:06,352 - INFO - Percentage of bad tip data: 9.88%
+2023-11-02 17:32:06,352 - INFO - Percentage of zero tip data: 47.73%
+2023-11-02 17:32:06,352 - INFO - data size 1083522
+2023-11-02 17:32:06,352 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.2, percentage_bad_tip: None, percentage_good_tip: None
+2023-11-02 17:32:06,364 - INFO - Model Accuracy: 0.38
+2023-11-02 17:37:47,650 - INFO - Percentage of good tip data: 42.40%
+2023-11-02 17:37:47,650 - INFO - Percentage of bad tip data: 9.88%
+2023-11-02 17:37:47,651 - INFO - Percentage of zero tip data: 47.73%
+2023-11-02 17:37:47,651 - INFO - data size 1083522
+2023-11-02 17:37:47,651 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.2, percentage_bad_tip: None, percentage_good_tip: None
+2023-11-02 17:37:47,661 - INFO - Model Accuracy: 0.37
+2023-11-02 17:39:26,707 - INFO - Percentage of good tip data: 32.92%
+2023-11-02 17:39:26,707 - INFO - Percentage of bad tip data: 21.10%
+2023-11-02 17:39:26,707 - INFO - Percentage of zero tip data: 45.98%
+2023-11-02 17:39:26,707 - INFO - data size 339300
+2023-11-02 17:39:26,707 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.2, percentage_bad_tip: None, percentage_good_tip: None
+2023-11-02 17:39:26,711 - INFO - Model Accuracy: 0.32
+2023-11-02 17:45:19,912 - INFO - Percentage of good tip data: 42.40%
+2023-11-02 17:45:19,913 - INFO - Percentage of bad tip data: 9.88%
+2023-11-02 17:45:19,913 - INFO - Percentage of zero tip data: 47.73%
+2023-11-02 17:45:19,913 - INFO - data size 1083522
+2023-11-02 17:45:19,914 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.2, percentage_bad_tip: None, percentage_good_tip: None
+2023-11-02 17:45:19,926 - INFO - Model Accuracy: 0.59

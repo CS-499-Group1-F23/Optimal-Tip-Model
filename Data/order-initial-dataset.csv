@@ -1,4 +1,4 @@
-Store_dma_id,Rack_time,To_the_door_time,Otd_time,Source_actor,Destination_type,Subtotal_amount_USD,Tip_USD
+store_number,Rack_time,To_the_door_time,Otd_time,Source_actor,Destination_type,Subtotal_amount_USD,Tip_USD
 541,3.567,,11.15,iOS,Carryout,15.99,0.0
 541,2.55,,14.6,iOS,Carryout,18.09,1.48
 541,0.383,,9.133,iOS,Carryout,15.99,0.0

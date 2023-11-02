@@ -169,29 +169,35 @@ def visualize_correlation(merged_data):
 
 
 def visualize_tip_distribution(merged_data):
-    # tip ranges
+    # Tip ranges
     tip_ranges = [0, 1, 3, 5, 8, 12, 15, 30, float('inf')]
 
-    # Initialize counts for each tip range
-    tip_counts = [0] * len(tip_ranges)
+    # Initialize a dictionary to store Rack_time sums (in minutes) for each tip range
+    rack_time_sums = {f"${tip_ranges[i - 1]}-{tip_ranges[i]}": 0 for i in range(1, len(tip_ranges))}
 
-    # Calculate the counts for each tip range
-    for tip in merged_data['Tip_USD']:
-        for i, max_tip in enumerate(tip_ranges):
+    # Count Rack_time in minutes for each tip range
+    for index, row in merged_data.iterrows():
+        tip = row['Tip_USD']
+        rack_time_minutes = row['Rack_time'] / 60  # Convert Rack_time from seconds to minutes
+        for i, max_tip in enumerate(tip_ranges[1:]):  # Skip the first range (0-1)
             if tip <= max_tip:
-                tip_counts[i] += 1
+                tip_range_key = f"${tip_ranges[i]}-{max_tip}"
+                rack_time_sums[tip_range_key] += rack_time_minutes
                 break
+        else:
+            tip_range_key = f"${tip_ranges[-2]}-{tip_ranges[-1]}"
+            rack_time_sums[tip_range_key] += rack_time_minutes
 
-    # Calculate the percentage of tips in each range
-    total_tips = len(merged_data)
-    tip_percentages = merged_data
+    # Extract Rack_time sums and tip range keys for plotting
+    rack_time_values = list(rack_time_sums.values())
+    tip_range_labels = list(rack_time_sums.keys())
 
     # Create the bar chart
     plt.figure(figsize=(10, 6))
-    plt.bar([f"${tip_ranges[i - 1]}-{tip_ranges[i]}" for i in range(1, len(tip_ranges))], tip_percentages[:-1])
+    plt.bar(tip_range_labels, rack_time_values)
     plt.xlabel('Tip Range (USD)')
-    plt.ylabel('Rack Time')
-    plt.title('Distribution of Tips in Different Price Ranges')
+    plt.ylabel('Rack Time (minutes)')
+    plt.title('Rack Time Distribution in Different Tip Ranges')
     plt.xticks(rotation=45)
     plt.show()
 
