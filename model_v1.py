@@ -244,10 +244,15 @@ def visualize_predictions(X_test, y_test, predictions):
     plt.scatter(X_test['subtotal_amount_USD'], predictions, color='red', label='Predicted')
     plt.xlabel('Subtotal Amount (USD)')
     plt.ylabel('Tip (USD)')
-    plt.title('Actual vs. Predicted Tips 50:50:0 (GoodTip:BadTip:ZeroTip)') # Is this always going to be 50:50:0?
+    plt.title(f'Actual vs. Predicted Tips {good_tip}:{bad_tip}:{zero_tip} (GoodTip:BadTip:ZeroTip)')
+
     plt.legend()
     plt.show()
 
+    visualize_predictions(X_test, y_test, predictions, good_tip=70, bad_tip=30, zero_tip=0)
+
+    #In this modified function, you can pass the good_tip, bad_tip, and zero_tip values as arguments when calling the function. 
+    #This allows you to change the graph header dynamically based on these values, making it more flexible for different scenarios.
 
 # main() Function:
 # Executes the program based on input arguments and relative data
