@@ -96,8 +96,8 @@ def data_loader(merged_data, test_size, percentage_zero_dollar_tip, percentage_b
     X = merged_data[['store_number', 'total_amount_USD']]
     y = merged_data['Tip_USD']
     print(len(X), len(y))
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
-
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42, shuffle=True)
+    #Added a shuffle argument to train_test_split in line 99 and marked it true. 
     return X_train, X_test, y_train, y_test
 
 
