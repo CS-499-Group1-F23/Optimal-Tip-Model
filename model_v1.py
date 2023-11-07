@@ -15,15 +15,21 @@ import logging
 logging.basicConfig(filename='Data/log.txt', level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
-# load the dataset
-# [issue]: make the order_data and store_Data funtion arguments
-def load_data():
-    #order_data = pd.read_csv('Data/order-initial-dataset.csv')
-    order_data = pd.read_csv('Data/order_data_10-30.csv')
-    store_data = pd.read_csv('Data/store_data_10-16.csv')
+# load_data() Function:
+# Simple function to allow for better organization of code.
+# Input: Strings of the order and store data source locations
+# Output: The pandas instance of each file for Python manipulation
+def load_data(order_source, store_source):
+    order_data = pd.read_csv(order_source)
+    store_data = pd.read_csv(store_source)
     return order_data, store_data
 
 
+# preprocess_data Function():
+# Processes the original data, creating a merged dataset and also calcuates an order total with tax (total_amount_USD).
+# Input: raw order data, raw store data, and the definition of a 'good tip'
+# (i.e., 12% or more is a good tip, 0-12% is bad, etc.)
+# Output: Processed (merged) dataset
 def preprocess_data(order_data, store_data, tip_percentage):
     order_data = order_data[order_data['Destination_type'] == 'Delivery'] #Drop non Delivery orders
     order_data = order_data[~order_data['Source_actor'].isin(['ubereats', 'doordash', 'grubhub'])] # Drop 3rd party aggregetors
@@ -45,19 +51,22 @@ def preprocess_data(order_data, store_data, tip_percentage):
     logging.info("data size %d", merged_data.size)
     return merged_data
 
-# [issue]: input validate check percentage_zero_dollar_tip to make sure the user input value !> zero_tip_percentage in dataset
-# [issue]: x_input shout be total_amount_USD not subtotal_amount_USD
-# [issue]: shuffle the dataset during train_test_split, see https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html
 
+# [issue]: input validate check percentage_zero_dollar_tip to make sure the user input value !> zero_tip_percentage in dataset
+# [issue]: shuffle the dataset during train_test_split, see https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html
+# data_loader Function()
+# Load data instances to be fed to the model for training and testing based on the merged data.
+# Input: Preprocessed (merged) data, test size, percent of zero tips, percent bad tips, percent good tips
+# Output: Data instances for model training and testing
 def data_loader(merged_data, test_size, percentage_zero_dollar_tip, percentage_bad_tip=None, percentage_good_tip=None):
     logging.info(f'data_loader parameters - test_size: {test_size}, '
                  f'percentage_zero_dollar_tip: {percentage_zero_dollar_tip}, '
                  f'percentage_bad_tip: {percentage_bad_tip}, '
                  f'percentage_good_tip: {percentage_good_tip}')
     
-  if percentage_zero_dollar_tip > merged_data['Tip_USD'].value_counts(normalize=True).get(0, 0):
+    if percentage_zero_dollar_tip > merged_data['Tip_USD'].value_counts(normalize=True).get(0, 0):
         raise ValueError("Invalid percentage. Not enough data points with zero tips.")
-    
+
     # Filter data based on percentage of zero tips
     zero_tip_mask = merged_data['Tip_USD'] == 0
     zero_tip_indices = zero_tip_mask.index.to_numpy()
@@ -84,15 +93,20 @@ def data_loader(merged_data, test_size, percentage_zero_dollar_tip, percentage_b
         good_tip_indices_to_keep = good_tip_indices[:num_good_tips_to_keep]
         merged_data = merged_data.loc[good_tip_indices_to_keep]
 
-    X = merged_data[['store_number', 'subtotal_amount_USD']]
+    X = merged_data[['store_number', 'total_amount_USD']]
     y = merged_data['Tip_USD']
     print(len(X), len(y))
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
+
     return X_train, X_test, y_train, y_test
 
 
-
-def train_model(X_train, X_test, y_train, y_test):
+# train_linear_model() Function:
+# Train the linear regression model, then test based on trained model predictions.
+# Accuracy is calculated in this function.
+# Input: Data instances for the inputs and outputs of the model testing variables
+# Output: The (now trained and testd) model and it's accuracy
+def train_linear_model(X_train, X_test, y_train, y_test):
     model = LinearRegression()
     model.fit(X_train, y_train)
     predictions = model.predict(X_test)
@@ -100,9 +114,13 @@ def train_model(X_train, X_test, y_train, y_test):
     accuracy = 1 - (mse / y_test.var())
     return model, accuracy
 
-# [issue] bar chart should not be generated unless user runs code with -V argument
+
+# visualize_correlation() Function:
+# Generate data visualizations for correlation of tips and rack time.
+# Input: Preprocessed data (merged data)
+# Output: Generated data visualization of tips and their (bucketed) correlation to rack time in the dataset
 def visualize_correlation(merged_data):
-    merged_data_copy = merged_data.copy()
+    # merged_data_copy = merged_data.copy()     <--- what is this meant to be for?
 
     # calculate the average rack time when the tip is zero
     avg_rack_time_zero_tip = merged_data[merged_data['Tip_USD'] == 0]['Rack_time'].mean()
@@ -172,6 +190,10 @@ def visualize_correlation(merged_data):
     plt.show()
 
 
+# visualize_tip_distribution() Function:
+# Generate data visualizations for data distribution based on tips.
+# Input: Preprocessed data (merged data)
+# Output: Generated data visualization of the distribution of tips in the dataset
 def visualize_tip_distribution(merged_data):
     # Tip ranges
     tip_ranges = [0, 1, 3, 5, 8, 12, 15, 30, float('inf')]
@@ -205,28 +227,47 @@ def visualize_tip_distribution(merged_data):
     plt.xticks(rotation=45)
     plt.show()
 
+
+# visualize_predictions() Function:
+# Generate data visualization for linear regression model predictions compared to actual values
+# This is a method of checking accuracy
+# Input: Linear regression model test data, and the predicted data
+# Output: Generated data visualization
 def visualize_predictions(X_test, y_test, predictions):
     plt.figure(figsize=(10, 6))
     plt.scatter(X_test['subtotal_amount_USD'], y_test, color='blue', label='Actual')
     plt.scatter(X_test['subtotal_amount_USD'], predictions, color='red', label='Predicted')
     plt.xlabel('Subtotal Amount (USD)')
     plt.ylabel('Tip (USD)')
-    plt.title('Actual vs. Predicted Tips 50:50:0 (GoodTip:BadTip:ZeroTip)')
+    plt.title('Actual vs. Predicted Tips 50:50:0 (GoodTip:BadTip:ZeroTip)') # Is this always going to be 50:50:0?
     plt.legend()
     plt.show()
 
 
-
+# main() Function:
+# Executes the program based on input arguments and relative data
+# Defaults to visualize (-V argument) and not save generated artifacts (-A argument) such as:
+# - Generated processed data CSVs
+# - Data visualization files
+# These defaults can be changed with input arguments in the command line.
 def main(visualize=True, save_artifacts=False):
-    order_data, store_data = load_data()
+
+    # Define Order and Store data CSV file locations
+    order_source = 'Data/order_data_10-30.csv'
+    store_source = 'Data/store_data_10-16.csv'
+
+    # Load pandas file instances
+    order_data, store_data = load_data(order_source, store_source)
+
+    # Preprocess data, then load the model data instances for the training and testing
     merged_data = preprocess_data(order_data, store_data, tip_percentage = 0.12)
     X_train, X_test, y_train, y_test = data_loader(merged_data, test_size=0.2, 
                                                    percentage_zero_dollar_tip=0.2)
-                                                   
-    model, accuracy = train_model(X_train, X_test, y_train, y_test)
+
+    # Train the model, log relative accuracy with the given input data
+    model, accuracy = train_linear_model(X_train, X_test, y_train, y_test)
     print(f'Model Accuracy: {accuracy:.2f}')
     logging.info(f'Model Accuracy: {accuracy:.2f}')
-
 
     if save_artifacts:
         # Save merged_data to a CSV file with the specified naming convention
@@ -236,12 +277,16 @@ def main(visualize=True, save_artifacts=False):
         print(f"Merged data saved as '{file_name}'.")
 
     if visualize:
-        visualize_tip_distribution(merged_data)
-        # visualize_correlation(merged_data)
-        predictions = model.predict(X_test)
-        visualize_predictions(X_test, y_test, predictions)
-        # Additional visualization for linear regression can be added here.
+        visualize_tip_distribution(merged_data) #visualize the distribution of tips in raw data
+        visualize_correlation(merged_data) #visualize the correlation of tips to rack time in raw data
+        predictions = model.predict(X_test) #predict how much should be tipped for an order
+        visualize_predictions(X_test, y_test, predictions) #visualize the accuracy of model predictions
+        # Additional visualization for linear regression and neural network to be added here.
 
+
+# Add possible arguments for Python execution.
+# '-V' argument: Visualize the data for linear regression and neural network models
+# '-A' argument: Save any generated artifacts. Only CSVs at this point, to save any data visualizations eventually.
 if __name__ == "__main__":
     import argparse
 
