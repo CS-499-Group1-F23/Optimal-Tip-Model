@@ -20,10 +20,20 @@ import logging
 
 
 def create_neural_network(hidden_layer_sizes=(100,)):
+    
+    # Create a neural network model.
+
+    # Args:
+    #     hidden_layer_sizes (tuple): A tuple specifying the number of nodes in each hidden layer.
+
+    # Returns:
+    #     tensorflow.keras.models.Sequential: Compiled neural network model.
+    
     model = Sequential()
     model.add(Dense(hidden_layer_sizes[0], input_dim=2))
     for layer_size in hidden_layer_sizes[1:]:
         model.add(Dense(layer_size))
+    model.add(Dense(1))
     model.add(Dense(1))
     model.compile(loss='mean_squared_error', optimizer='adam')
     return model
@@ -42,7 +52,7 @@ def load_data():
 def preprocess_data(order_data, store_data, tip_percentage):
     order_data = order_data[order_data['Destination_type'] == 'Delivery'] #Drop non Delivery orders
     order_data = order_data[~order_data['Source_actor'].isin(['ubereats', 'doordash', 'grubhub'])] # Drop 3rd party aggregetors
-    merged_data = pd.merge(order_data, store_data, on='store_number', how='inner') # Merge two datapoints using Store_dma_id as primary_key
+    merged_data = pd.merge(order_data, store_data, on='store_number', how='inner') # Merge two datapoints using Store_number as primary_key
     merged_data['total_amount_USD'] = merged_data['total_tax_USD'] + merged_data['subtotal_amount_USD'] # Sum post tax
     merged_data['good_tip'] = merged_data.apply(lambda row: 'TRUE' if row['Tip_USD'] > tip_percentage * row['total_amount_USD'] else ('ZERO' if row['Tip_USD'] == 0 else 'FALSE'), axis=1) # Get good tip 
     
@@ -96,7 +106,7 @@ def data_loader(merged_data, test_size, percentage_zero_dollar_tip, percentage_b
         good_tip_indices_to_keep = good_tip_indices[:num_good_tips_to_keep]
         merged_data = merged_data.loc[good_tip_indices_to_keep]
 
-    X = merged_data[['store_number', 'subtotal_amount_USD']]
+    X = merged_data[['store_number', 'total_amount_USD']]
     y = merged_data['Tip_USD']
     print(len(X), len(y))
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
@@ -105,6 +115,19 @@ def data_loader(merged_data, test_size, percentage_zero_dollar_tip, percentage_b
 
 
 def train_model(X_train, X_test, y_train, y_test, use_neural_network=False):
+    
+    # Train the regression model using either Linear Regression or Neural Network (with grid search).
+
+    # Args:
+    #     X_train (numpy.ndarray): Training features.
+    #     X_test (numpy.ndarray): Testing features.
+    #     y_train (numpy.ndarray): Training labels.
+    #     y_test (numpy.ndarray): Testing labels.
+    #     use_neural_network (bool): Flag indicating whether to use Neural Network or Linear Regression.
+
+    # Returns:
+    #     tuple: A tuple containing the trained model and accuracy score.
+    
     if use_neural_network:
         neural_network = KerasRegressor(model=create_neural_network, verbose=0)
         param_grid = {}  # No hyperparameters to tune in the Keras model itself
