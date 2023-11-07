@@ -36,7 +36,7 @@ def preprocess_data(order_data, store_data, tip_percentage):
     order_data = order_data[order_data['Destination_type'] == 'Delivery'] #Drop non Delivery orders
     order_data = order_data[~order_data['Source_actor'].isin(['ubereats', 'doordash', 'grubhub'])] # Drop 3rd party aggregetors
     merged_data = pd.merge(order_data, store_data, on='store_number', how='inner') # Merge two datapoints using store_number as primary_key
-    merged_data['total_amount_USD'] = merged_data['total_tax_USD'] + merged_data['subtotal_amount_USD'] # Sum post-tax
+    merged_data['total_amount_USD'] = (merged_data['total_tax_USD'] + merged_data['subtotal_amount_USD'] - merged_data['total_tax_USD']) # Sum post-tax
     merged_data['good_tip'] = merged_data.apply(lambda row: 'TRUE' if row['Tip_USD'] > tip_percentage * row['total_amount_USD'] else ('ZERO' if row['Tip_USD'] == 0 else 'FALSE'), axis=1) # Get good tip 
     
     total_rows = len(merged_data)
@@ -237,9 +237,9 @@ def visualize_tip_distribution(merged_data):
 # Output: Generated data visualization
 def visualize_predictions(X_test, y_test, predictions):
     plt.figure(figsize=(10, 6))
-    plt.scatter(X_test['subtotal_amount_USD'], y_test, color='blue', label='Actual')
-    plt.scatter(X_test['subtotal_amount_USD'], predictions, color='red', label='Predicted')
-    plt.xlabel('Subtotal Amount (USD)')
+    plt.scatter(X_test['total_amount_USD'], y_test, color='blue', label='Actual')
+    plt.scatter(X_test['total_amount_USD'], predictions, color='red', label='Predicted')
+    plt.xlabel('Total Amount (USD)')
     plt.ylabel('Tip (USD)')
     plt.title('Actual vs. Predicted Tips 50:50:0 (GoodTip:BadTip:ZeroTip)') # Is this always going to be 50:50:0?
     plt.legend()
