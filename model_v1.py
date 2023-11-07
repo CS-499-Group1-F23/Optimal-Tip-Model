@@ -12,10 +12,10 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 mpl.use('TkAgg')
 
-
 # Set up logging configuration
 logging.basicConfig(filename='Data/log.txt', level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
+
 
 # load_data() Function:
 # Simple function to allow for better organization of code.
@@ -32,13 +32,34 @@ def load_data(order_source, store_source):
 # Input: raw order data, raw store data, and the definition of a 'good tip'
 # (i.e., 12% or more is a good tip, 0-12% is bad, etc.)
 # Output: Processed (merged) dataset
-def preprocess_data(order_data, store_data, tip_percentage):
-    order_data = order_data[order_data['Destination_type'] == 'Delivery'] #Drop non Delivery orders
-    order_data = order_data[~order_data['Source_actor'].isin(['ubereats', 'doordash', 'grubhub'])] # Drop 3rd party aggregetors
-    merged_data = pd.merge(order_data, store_data, on='store_number', how='inner') # Merge two datapoints using store_number as primary_key
-    merged_data['total_amount_USD'] = (merged_data['total_tax_USD'] + merged_data['subtotal_amount_USD'] - merged_data['total_tax_USD']) # Sum post-tax
-    merged_data['good_tip'] = merged_data.apply(lambda row: 'TRUE' if row['Tip_USD'] > tip_percentage * row['total_amount_USD'] else ('ZERO' if row['Tip_USD'] == 0 else 'FALSE'), axis=1) # Get good tip 
-    
+def preprocess_data(order_data, store_data, tip_percentage, percent_zero):
+    # Remove non-delivery orders
+    order_data = order_data[order_data['Destination_type'] == 'Delivery']
+
+    # Remove 3rd party aggregators
+    order_data = order_data[~order_data['Source_actor'].isin(['Uber Eats', 'DoorDash', 'Grubhub'])]
+
+    # Remove data with negative tips
+    order_data = order_data[order_data['Tip_USD'] >= 0]
+
+    # Remove data with negative or null rack time
+    order_data = order_data[~order_data['Rack_time'].isnull()]
+    order_data = order_data[order_data['Rack_time'] >= 0]
+
+    # Merge two datapoints using store_number as primary_key
+    merged_data = pd.merge(order_data, store_data, on='store_number', how='inner')
+
+    # Sum post-tax
+    merged_data['total_amount_USD'] = (merged_data['total_tax_USD'] + merged_data['net_sales_USD'])
+
+    # Determine if the tipped amount is considered a good tip or not
+    merged_data['good_tip'] = merged_data.apply(
+        lambda row: 'TRUE'
+        if row['Tip_USD'] > tip_percentage * row['total_amount_USD']
+        else ('ZERO' if row['Tip_USD'] == 0 else 'FALSE')
+        , axis=1)
+
+    # Log data statistics
     total_rows = len(merged_data)
     good_tip_percentage = len(merged_data[merged_data['good_tip'] == 'TRUE']) / total_rows * 100
     bad_tip_percentage = len(merged_data[merged_data['good_tip'] == 'FALSE']) / total_rows * 100
@@ -51,11 +72,16 @@ def preprocess_data(order_data, store_data, tip_percentage):
     logging.info(f"Percentage of bad tip data: {bad_tip_percentage:.2f}%")
     logging.info(f"Percentage of zero tip data: {zero_tip_percentage:.2f}%")
     logging.info("data size %d", merged_data.size)
+
+    # Throw an error if the percent of zero dollar tips requested in dataset is higher than in the processed dataset
+    if percent_zero > zero_tip_percentage:
+        raise ValueError(
+            f"Error! Percent zero tips required by training is greater than percentage zero tips in raw dataset:\n\t"
+            f"{percent_zero} > {zero_tip_percentage} -> {percent_zero > zero_tip_percentage}")
+
     return merged_data
 
 
-# [issue]: input validate check percentage_zero_dollar_tip to make sure the user input value !> zero_tip_percentage in dataset
-# [issue]: shuffle the dataset during train_test_split, see https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html
 # data_loader Function()
 # Load data instances to be fed to the model for training and testing based on the merged data.
 # Input: Preprocessed (merged) data, test size, percent of zero tips, percent bad tips, percent good tips
@@ -65,7 +91,7 @@ def data_loader(merged_data, test_size, percentage_zero_dollar_tip, percentage_b
                  f'percentage_zero_dollar_tip: {percentage_zero_dollar_tip}, '
                  f'percentage_bad_tip: {percentage_bad_tip}, '
                  f'percentage_good_tip: {percentage_good_tip}')
-    
+
     if percentage_zero_dollar_tip > merged_data['Tip_USD'].value_counts(normalize=True).get(0, 0):
         raise ValueError("Invalid percentage. Not enough data points with zero tips.")
 
@@ -98,7 +124,7 @@ def data_loader(merged_data, test_size, percentage_zero_dollar_tip, percentage_b
     X = merged_data[['store_number', 'total_amount_USD']]
     y = merged_data['Tip_USD']
     print(len(X), len(y))
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42, shuffle=True)
 
     return X_train, X_test, y_train, y_test
 
@@ -112,7 +138,7 @@ def train_linear_model(X_train, X_test, y_train, y_test):
     model = LinearRegression()
     model.fit(X_train, y_train)
     predictions = model.predict(X_test)
-    mse = mean_squared_error(y_test, predictions)
+    mse = mean_squared_error(y_test, predictions, squared=False)
     accuracy = 1 - (mse / y_test.var())
     return model, accuracy
 
@@ -122,8 +148,6 @@ def train_linear_model(X_train, X_test, y_train, y_test):
 # Input: Preprocessed data (merged data)
 # Output: Generated data visualization of tips and their (bucketed) correlation to rack time in the dataset
 def visualize_correlation(merged_data):
-    # merged_data_copy = merged_data.copy()     <--- what is this meant to be for?
-
     # calculate the average rack time when the tip is zero
     avg_rack_time_zero_tip = merged_data[merged_data['Tip_USD'] == 0]['Rack_time'].mean()
     print(f"Average Rack Time when Tip is Zero: {avg_rack_time_zero_tip:.2f} minutes")
@@ -135,25 +159,25 @@ def visualize_correlation(merged_data):
     # scatterplot before removing zero-dollar tips
     plt.figure(figsize=(12, 6))
     plt.subplot(2, 2, 1)
-    sns.scatterplot(x='Rack_time', y='Tip_USD', data=merged_data)
-    plt.xlabel('Rack Time')
-    plt.ylabel('Tip (USD)')
+    sns.scatterplot(y='Rack_time', x='Tip_USD', data=merged_data)
+    plt.ylabel('Rack Time')
+    plt.xlabel('Tip (USD)')
     plt.title('Correlation between Rack Time and Tip (Scatterplot) - Before Removal')
-    plt.xlim(1, 50)
-    plt.ylim(0, 50)
+    plt.ylim(1, 50)
+    plt.xlim(0, 50)
 
     # Line chart before removing zero-dollar tips
     plt.subplot(2, 2, 2)
-    sns.lineplot(x='Rack_time', y='Tip_USD', data=merged_data)
-    plt.xlabel('Rack Time')
-    plt.ylabel('Tip (USD)')
+    sns.lineplot(y='Rack_time', x='Tip_USD', data=merged_data)
+    plt.ylabel('Rack Time')
+    plt.xlabel('Tip (USD)')
     plt.title('Correlation between Rack Time and Tip (Line Chart) - Before Removal')
-    plt.xlim(1, 50)
-    plt.ylim(0, 50)
+    plt.ylim(1, 50)
+    plt.xlim(0, 50)
 
     # show statistics before removal
     zero_dollar_tips_percentage_before = (len(merged_data[merged_data['Tip_USD'] == 0]) / len(merged_data)) * 100
-    correlation_coefficient_before = merged_data['Rack_time'].corr(merged_data['Tip_USD'])
+    correlation_coefficient_before = merged_data['Tip_USD'].corr(merged_data['Rack_time'])
     number_of_data_points_before = len(merged_data)
     print(f"Percentage of $0 tips (Before): {zero_dollar_tips_percentage_before:.2f}%")
     print(f"Correlation coefficient (Pearson) between Rack Time and Tip (Before): {correlation_coefficient_before:.2f}")
@@ -164,28 +188,29 @@ def visualize_correlation(merged_data):
 
     # scatterplot after removing zero-dollar tips and outliers
     plt.subplot(2, 2, 3)
-    sns.scatterplot(x='Rack_time', y='Tip_USD', data=merged_data)
-    plt.xlabel('Rack Time')
-    plt.ylabel('Tip (USD)')
+    sns.scatterplot(y='Rack_time', x='Tip_USD', data=merged_data)
+    plt.ylabel('Rack Time')
+    plt.xlabel('Tip (USD)')
     plt.title('Correlation between Rack Time and Tip (Scatterplot) - After Removal')
-    plt.xlim(1, 50)
-    plt.ylim(0, 30)  # Updated ylim to accommodate the removal of outliers
+    plt.ylim(1, 50)
+    plt.xlim(0, 30)  # Updated ylim to accommodate the removal of outliers
 
     # line chart after removing zero-dollar tips and outliers
     plt.subplot(2, 2, 4)
-    sns.lineplot(x='Rack_time', y='Tip_USD', data=merged_data)
-    plt.xlabel('Rack Time')
-    plt.ylabel('Tip (USD)')
+    sns.lineplot(y='Rack_time', x='Tip_USD', data=merged_data)
+    plt.ylabel('Rack Time')
+    plt.xlabel('Tip (USD)')
     plt.title('Correlation between Rack Time and Tip (Line Chart) - After Removal')
-    plt.xlim(1, 50)
-    plt.ylim(0, 30)  # Updated ylim to accommodate the removal of outliers
+    plt.ylim(1, 50)
+    plt.xlim(0, 30)  # Updated ylim to accommodate the removal of outliers
 
     # calculate statistics after removal
     zero_dollar_tips_percentage_after = (len(merged_data[merged_data['Tip_USD'] == 0]) / len(merged_data)) * 100
-    correlation_coefficient_after = merged_data['Rack_time'].corr(merged_data['Tip_USD'])
+    correlation_coefficient_after = merged_data['Tip_USD'].corr(merged_data['Rack_time'])
     number_of_data_points_after = len(merged_data)
     print(f"Percentage of $0 tips (After Removal): {zero_dollar_tips_percentage_after:.2f}%")
-    print(f"Correlation coefficient (Pearson) between Rack Time and Tip (After Removal): {correlation_coefficient_after:.2f}")
+    print(
+        f"Correlation coefficient (Pearson) between Rack Time and Tip (After Removal): {correlation_coefficient_after:.2f}")
     print(f"Number of data points (After Removal): {number_of_data_points_after}")
 
     plt.tight_layout()
@@ -235,14 +260,22 @@ def visualize_tip_distribution(merged_data):
 # This is a method of checking accuracy
 # Input: Linear regression model test data, and the predicted data
 # Output: Generated data visualization
-def visualize_predictions(X_test, y_test, predictions):
+def visualize_predictions(X_test, y_test, predictions, good_tip, percent_good, percent_bad, percent_zero):
     plt.figure(figsize=(10, 6))
     plt.scatter(X_test['total_amount_USD'], y_test, color='blue', label='Actual')
     plt.scatter(X_test['total_amount_USD'], predictions, color='red', label='Predicted')
     plt.xlabel('Total Amount (USD)')
     plt.ylabel('Tip (USD)')
-    plt.title('Actual vs. Predicted Tips 50:50:0 (GoodTip:BadTip:ZeroTip)') # Is this always going to be 50:50:0?
+    plt.title(
+        f'Actual vs. Predicted Tips {percent_good * 100}:{percent_bad * 100}:{percent_zero * 100} (Good:Bad:Zero)')  # Is this always going to be 50:50:0?
     plt.legend()
+    plt.annotate(
+        f'*Good tip considered to be {good_tip * 100}% or higher.',
+        xy=(1.0, -0.2),
+        xycoords='axes fraction',
+        ha='right',
+        va="center",
+        fontsize=10)
     plt.show()
 
 
@@ -253,42 +286,72 @@ def visualize_predictions(X_test, y_test, predictions):
 # - Data visualization files
 # These defaults can be changed with input arguments in the command line.
 def main(visualize=True, save_artifacts=False):
-
     # Define Order and Store data CSV file locations
     order_source = 'Data/order_data_10-30.csv'
     store_source = 'Data/store_data_10-16.csv'
 
-    # Load pandas file instances
+    # Define the distribution of good tips to bad tips to zero dollar tips for the model training
+    percent_good = 0.6
+    percent_bad = 0.3
+    percent_zero = 0.1
+
+    # Define what a good tip, like what is an ideal tip.
+    # (i.e., 0.12 would mean 12+% is considered good)
+    good_tip_definition = 0.12
+
+    # Define the test size in percent of original data set
+    # (i.e., 0.2 would mean 20% of the data set is used for testing, 80% is used for training)
+    test_size = 0.2
+
+    # Confirm if the defined distribution of tips for model training is divided correctly
+    if round(percent_good + percent_bad + percent_zero, 4) != 1:
+        raise ValueError(
+            f"Error! Good:Bad:Zero distribution does not equal 100%... it equals {percent_good + percent_bad + percent_zero}")
+
+    # Load pandas data file instances
     order_data, store_data = load_data(order_source, store_source)
 
     # Preprocess data, then load the model data instances for the training and testing
-    merged_data = preprocess_data(order_data, store_data, tip_percentage = 0.12)
-    X_train, X_test, y_train, y_test = data_loader(merged_data, test_size=0.2, 
-                                                   percentage_zero_dollar_tip=0.2)
+    merged_data = preprocess_data(order_data, store_data, tip_percentage=good_tip_definition, percent_zero=percent_zero)
+    X_train, X_test, y_train, y_test = data_loader(merged_data,
+                                                   test_size=test_size,
+                                                   percentage_good_tip=percent_good,
+                                                   percentage_bad_tip=percent_bad,
+                                                   percentage_zero_dollar_tip=percent_zero)
 
     # Train the model, log relative accuracy with the given input data
     model, accuracy = train_linear_model(X_train, X_test, y_train, y_test)
     print(f'Model Accuracy: {accuracy:.2f}')
     logging.info(f'Model Accuracy: {accuracy:.2f}')
 
+    # Save merged_data to a CSV file with the specified naming convention
     if save_artifacts:
-        # Save merged_data to a CSV file with the specified naming convention
         current_datetime = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
         file_name = f'merged_data_{current_datetime}.csv'
         merged_data.to_csv(file_name, index=False)
         print(f"Merged data saved as '{file_name}'.")
 
+    # Show visualization for raw data and model predictions through matplotlib graphs
     if visualize:
-        visualize_tip_distribution(merged_data) #visualize the distribution of tips in raw data
-        visualize_correlation(merged_data) #visualize the correlation of tips to rack time in raw data
-        predictions = model.predict(X_test) #predict how much should be tipped for an order
-        visualize_predictions(X_test, y_test, predictions) #visualize the accuracy of model predictions
+        # visualize the distribution of tips in raw data
+        visualize_tip_distribution(merged_data)
+
+        # visualize the correlation of tips to rack time in raw data
+        visualize_correlation(merged_data)
+
+        # predict how much should be tipped for an order
+        predictions = model.predict(X_test)
+
+        # visualize the accuracy of model predictions
+        visualize_predictions(X_test, y_test, predictions, good_tip_definition, percent_good, percent_bad, percent_zero)
+
         # Additional visualization for linear regression and neural network to be added here.
 
 
 # Add possible arguments for Python execution.
 # '-V' argument: Visualize the data for linear regression and neural network models
-# '-A' argument: Save any generated artifacts. Only CSVs at this point, to save any data visualizations eventually.
+# '-A' argument: Save any generated artifacts. Only CSVs at this point, to automatically
+#                save any data visualizations eventually.
 if __name__ == "__main__":
     import argparse
 
