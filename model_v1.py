@@ -157,7 +157,7 @@ def visualize_correlation(merged_data):
     print(f"Average Rack Time when Tip is More than Zero: {avg_rack_time_non_zero_tip:.2f} minutes")
 
     # scatterplot before removing zero-dollar tips
-    plt.figure(figsize=(12, 6))
+    plt.figure(figsize=(10, 6))
     plt.subplot(2, 2, 1)
     sns.scatterplot(y='Rack_time', x='Tip_USD', data=merged_data)
     plt.ylabel('Rack Time')
@@ -166,14 +166,14 @@ def visualize_correlation(merged_data):
     plt.ylim(1, 50)
     plt.xlim(0, 50)
 
-    # Line chart before removing zero-dollar tips
-    plt.subplot(2, 2, 2)
-    sns.lineplot(y='Rack_time', x='Tip_USD', data=merged_data)
-    plt.ylabel('Rack Time')
-    plt.xlabel('Tip (USD)')
-    plt.title('Correlation between Rack Time and Tip (Line Chart) - Before Removal')
-    plt.ylim(1, 50)
-    plt.xlim(0, 50)
+    # # Line chart before removing zero-dollar tips
+    # plt.subplot(2, 2, 2)
+    # sns.lineplot(y='Rack_time', x='Tip_USD', data=merged_data)
+    # plt.ylabel('Rack Time')
+    # plt.xlabel('Tip (USD)')
+    # plt.title('Correlation between Rack Time and Tip (Line Chart) - Before Removal')
+    # plt.ylim(1, 50)
+    # plt.xlim(0, 50)
 
     # show statistics before removal
     zero_dollar_tips_percentage_before = (len(merged_data[merged_data['Tip_USD'] == 0]) / len(merged_data)) * 100
@@ -195,22 +195,21 @@ def visualize_correlation(merged_data):
     plt.ylim(1, 50)
     plt.xlim(0, 30)  # Updated ylim to accommodate the removal of outliers
 
-    # line chart after removing zero-dollar tips and outliers
-    plt.subplot(2, 2, 4)
-    sns.lineplot(y='Rack_time', x='Tip_USD', data=merged_data)
-    plt.ylabel('Rack Time')
-    plt.xlabel('Tip (USD)')
-    plt.title('Correlation between Rack Time and Tip (Line Chart) - After Removal')
-    plt.ylim(1, 50)
-    plt.xlim(0, 30)  # Updated ylim to accommodate the removal of outliers
+    # # line chart after removing zero-dollar tips and outliers
+    # plt.subplot(2, 2, 4)
+    # sns.lineplot(y='Rack_time', x='Tip_USD', data=merged_data)
+    # plt.ylabel('Rack Time')
+    # plt.xlabel('Tip (USD)')
+    # plt.title('Correlation between Rack Time and Tip (Line Chart) - After Removal')
+    # plt.ylim(1, 50)
+    # plt.xlim(0, 30)  # Updated ylim to accommodate the removal of outliers
 
     # calculate statistics after removal
     zero_dollar_tips_percentage_after = (len(merged_data[merged_data['Tip_USD'] == 0]) / len(merged_data)) * 100
     correlation_coefficient_after = merged_data['Tip_USD'].corr(merged_data['Rack_time'])
     number_of_data_points_after = len(merged_data)
     print(f"Percentage of $0 tips (After Removal): {zero_dollar_tips_percentage_after:.2f}%")
-    print(
-        f"Correlation coefficient (Pearson) between Rack Time and Tip (After Removal): {correlation_coefficient_after:.2f}")
+    print(f"Correlation coefficient (Pearson) between Rack Time and Tip (After Removal): {correlation_coefficient_after:.2f}")
     print(f"Number of data points (After Removal): {number_of_data_points_after}")
 
     plt.tight_layout()
@@ -260,22 +259,16 @@ def visualize_tip_distribution(merged_data):
 # This is a method of checking accuracy
 # Input: Linear regression model test data, and the predicted data
 # Output: Generated data visualization
-def visualize_predictions(X_test, y_test, predictions, good_tip, percent_good, percent_bad, percent_zero):
+def visualize_predictions(X_test, y_test, predictions, accuracy, good_tip, percent_good, percent_bad, percent_zero):
     plt.figure(figsize=(10, 6))
     plt.scatter(X_test['total_amount_USD'], y_test, color='blue', label='Actual')
     plt.scatter(X_test['total_amount_USD'], predictions, color='red', label='Predicted')
     plt.xlabel('Total Amount (USD)')
     plt.ylabel('Tip (USD)')
-    plt.title(
-        f'Actual vs. Predicted Tips {percent_good * 100}:{percent_bad * 100}:{percent_zero * 100} (Good:Bad:Zero)')  # Is this always going to be 50:50:0?
+    plt.title(f'Actual vs. Predicted Tips {percent_good * 100}:{percent_bad * 100}:{percent_zero * 100} (Good:Bad:Zero)')
     plt.legend()
-    plt.annotate(
-        f'*Good tip considered to be {good_tip * 100}% or higher.',
-        xy=(1.0, -0.2),
-        xycoords='axes fraction',
-        ha='right',
-        va="center",
-        fontsize=10)
+    tip_annotation = f'*Good tip considered to be {good_tip * 100}% or higher.\nAccuracy: {(accuracy*100):.2f}%'
+    plt.text(1, -0.1, tip_annotation, fontsize=9, ha='right', va='center', transform=plt.gca().transAxes)
     plt.show()
 
 
@@ -305,8 +298,7 @@ def main(visualize=True, save_artifacts=False):
 
     # Confirm if the defined distribution of tips for model training is divided correctly
     if round(percent_good + percent_bad + percent_zero, 4) != 1:
-        raise ValueError(
-            f"Error! Good:Bad:Zero distribution does not equal 100%... it equals {percent_good + percent_bad + percent_zero}")
+        raise ValueError(f"Error! Good:Bad:Zero distribution does not equal 100%... it equals {percent_good + percent_bad + percent_zero}")
 
     # Load pandas data file instances
     order_data, store_data = load_data(order_source, store_source)
@@ -343,7 +335,7 @@ def main(visualize=True, save_artifacts=False):
         predictions = model.predict(X_test)
 
         # visualize the accuracy of model predictions
-        visualize_predictions(X_test, y_test, predictions, good_tip_definition, percent_good, percent_bad, percent_zero)
+        visualize_predictions(X_test, y_test, predictions, accuracy, good_tip_definition, percent_good, percent_bad, percent_zero)
 
         # Additional visualization for linear regression and neural network to be added here.
 
