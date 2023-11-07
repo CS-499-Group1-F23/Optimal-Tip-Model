@@ -1,16 +1,32 @@
 # pip install pandas scikit-learn seaborn matplotlib
+# pip install tensorflow-keras-wrappers
+
 import os
 from datetime import datetime
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error
+from sklearn.neural_network import MLPRegressor
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+from scikeras.wrappers import KerasRegressor 
+
 import seaborn as sns
 import matplotlib.pyplot as plt
 import logging
 
 
+def create_neural_network(hidden_layer_sizes=(100,)):
+    model = Sequential()
+    model.add(Dense(hidden_layer_sizes[0], input_dim=2))
+    for layer_size in hidden_layer_sizes[1:]:
+        model.add(Dense(layer_size))
+    model.add(Dense(1))
+    model.compile(loss='mean_squared_error', optimizer='adam')
+    return model
 # Set up logging configuration
 logging.basicConfig(filename='Data/log.txt', level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
@@ -46,7 +62,7 @@ def preprocess_data(order_data, store_data, tip_percentage):
 
 import numpy as np
 
-def data_loader(merged_data, test_size, percentage_zero_dollar_tip, percentage_bad_tip=None, percentage_good_tip=None):
+def data_loader(merged_data, test_size, percentage_zero_dollar_tip, percentage_bad_tip=None, percentage_good_tip=1):
     logging.info(f'data_loader parameters - test_size: {test_size}, '
                  f'percentage_zero_dollar_tip: {percentage_zero_dollar_tip}, '
                  f'percentage_bad_tip: {percentage_bad_tip}, '
@@ -88,14 +104,24 @@ def data_loader(merged_data, test_size, percentage_zero_dollar_tip, percentage_b
 
 
 
-def train_model(X_train, X_test, y_train, y_test):
-    model = LinearRegression()
-    model.fit(X_train, y_train)
-    predictions = model.predict(X_test)
-    mse = mean_squared_error(y_test, predictions)
-    accuracy = 1 - (mse / y_test.var())
-    return model, accuracy
-
+def train_model(X_train, X_test, y_train, y_test, use_neural_network=False):
+    if use_neural_network:
+        neural_network = KerasRegressor(model=create_neural_network, verbose=0)
+        param_grid = {}  # No hyperparameters to tune in the Keras model itself
+        grid_search = GridSearchCV(estimator=neural_network, param_grid=param_grid, scoring='neg_mean_squared_error', cv=3)
+        grid_search.fit(X_train, y_train)
+        best_nn = grid_search.best_estimator_
+        predictions = best_nn.predict(X_test)
+        mse = mean_squared_error(y_test, predictions)
+        accuracy = 1 - (mse / y_test.var())
+        return best_nn, accuracy
+    else:
+        model = LinearRegression()
+        model.fit(X_train, y_train)
+        predictions = model.predict(X_test)
+        mse = mean_squared_error(y_test, predictions)
+        accuracy = 1 - (mse / y_test.var())
+        return model, accuracy
 
 def visualize_correlation(merged_data):
     merged_data_copy = merged_data.copy()
@@ -217,10 +243,14 @@ def main(visualize=True, save_artifacts=False):
     order_data, store_data = load_data()
     merged_data = preprocess_data(order_data, store_data, tip_percentage = 0.12)
     X_train, X_test, y_train, y_test = data_loader(merged_data, test_size=0.2, 
-                                                   percentage_zero_dollar_tip=0.2)
+                                                   percentage_zero_dollar_tip=0.1)
                                                    
     model, accuracy = train_model(X_train, X_test, y_train, y_test)
     print(f'Model Accuracy: {accuracy:.2f}')
+
+    model, accuracy2 = train_model(X_train, X_test, y_train, y_test, use_neural_network=True)
+    print(f'Model2 Accuracy: {accuracy2:.2f}')
+
     logging.info(f'Model Accuracy: {accuracy:.2f}')
 
 
@@ -232,7 +262,7 @@ def main(visualize=True, save_artifacts=False):
         print(f"Merged data saved as '{file_name}'.")
 
     if visualize:
-        visualize_tip_distribution(merged_data)
+        # visualize_tip_distribution(merged_data)
         # visualize_correlation(merged_data)
         predictions = model.predict(X_test)
         visualize_predictions(X_test, y_test, predictions)
