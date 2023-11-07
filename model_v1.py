@@ -160,9 +160,9 @@ def visualize_correlation(merged_data):
     plt.figure(figsize=(10, 6))
     plt.subplot(2, 2, 1)
     sns.scatterplot(y='Rack_time', x='Tip_USD', data=merged_data)
-    plt.ylabel('Rack Time')
+    plt.ylabel('Rack Time (minutes)')
     plt.xlabel('Tip (USD)')
-    plt.title('Correlation between Rack Time and Tip (Scatterplot) - Before Removal')
+    plt.title('Rack Time vs. Tip With Statistical Outliers')
     plt.ylim(1, 50)
     plt.xlim(0, 50)
 
@@ -189,9 +189,9 @@ def visualize_correlation(merged_data):
     # scatterplot after removing zero-dollar tips and outliers
     plt.subplot(2, 2, 3)
     sns.scatterplot(y='Rack_time', x='Tip_USD', data=merged_data)
-    plt.ylabel('Rack Time')
+    plt.ylabel('Rack Time (minutes)')
     plt.xlabel('Tip (USD)')
-    plt.title('Correlation between Rack Time and Tip (Scatterplot) - After Removal')
+    plt.title('Rack Time vs. Tip Without Statistical Outliers')
     plt.ylim(1, 50)
     plt.xlim(0, 30)  # Updated ylim to accommodate the removal of outliers
 
@@ -256,19 +256,27 @@ def visualize_tip_distribution(merged_data):
 
 # visualize_predictions() Function:
 # Generate data visualization for linear regression model predictions compared to actual values
-# This is a method of checking accuracy
+# This is a method of checking accuracy and determining optimal tip vs. actual tip
 # Input: Linear regression model test data, and the predicted data
 # Output: Generated data visualization
 def visualize_predictions(X_test, y_test, predictions, accuracy, good_tip, percent_good, percent_bad, percent_zero):
     plt.figure(figsize=(10, 6))
     plt.scatter(X_test['total_amount_USD'], y_test, color='blue', label='Actual')
-    plt.scatter(X_test['total_amount_USD'], predictions, color='red', label='Predicted')
+    plt.scatter(X_test['total_amount_USD'], predictions, color='red', label='Optimal')
     plt.xlabel('Total Amount (USD)')
     plt.ylabel('Tip (USD)')
     plt.title(f'Actual vs. Predicted Tips {percent_good * 100}:{percent_bad * 100}:{percent_zero * 100} (Good:Bad:Zero)')
     plt.legend()
-    tip_annotation = f'*Good tip considered to be {good_tip * 100}% or higher.\nAccuracy: {(accuracy*100):.2f}%'
-    plt.text(1, -0.1, tip_annotation, fontsize=9, ha='right', va='center', transform=plt.gca().transAxes)
+    
+    # Add important background information to the plot
+    plot_annotation = f'*Good tip considered to be {good_tip * 100}% or higher.\nAccuracy: {(accuracy*100):.2f}%'
+    plt.text(1, -0.1, plot_annotation, fontsize=9, ha='right', va='center', transform=plt.gca().transAxes)
+
+    # Add the equation of the predicted line
+    coefs = np.polyfit(X_test['total_amount_USD'], predictions, 1)
+    equation = f"Predicted Line: y = {coefs[0]:.2f}x + {coefs[1]:.2f}"
+    plt.text(-0.015, -0.08, equation, fontsize=9, ha='left', va='center', transform=plt.gca().transAxes)
+
     plt.show()
 
 
