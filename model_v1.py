@@ -233,6 +233,11 @@ def visualize_tip_distribution(merged_data):
 # This is a method of checking accuracy
 # Input: Linear regression model test data, and the predicted data
 # Output: Generated data visualization
+
+# [issue] the graph header should be dynamic and changed base of the parameter's input. call the funtion with extra
+# arguments for zero, bad, and good tips and print the plt.title based of those
+# example: plt.title(f'Actual vs. Predicted Tips {good_tip}: {bad_tip}: {Zero_tip} (GoodTip:BadTip:ZeroTip)')
+
 def visualize_predictions(X_test, y_test, predictions):
     plt.figure(figsize=(10, 6))
     plt.scatter(X_test['subtotal_amount_USD'], y_test, color='blue', label='Actual')
@@ -246,11 +251,11 @@ def visualize_predictions(X_test, y_test, predictions):
 
 # main() Function:
 # Executes the program based on input arguments and relative data
-# Defaults to visualize (-V argument) and not save generated artifacts (-A argument) such as:
+# Defaults not to visualize (-V argument) and not save generated artifacts (-A argument) such as:
 # - Generated processed data CSVs
 # - Data visualization files
 # These defaults can be changed with input arguments in the command line.
-def main(visualize=True, save_artifacts=False):
+def main(visualize=False, save_artifacts=False):
 
     # Define Order and Store data CSV file locations
     order_source = 'Data/order_data_10-30.csv'
