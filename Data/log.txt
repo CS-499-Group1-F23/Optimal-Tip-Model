@@ -372,3 +372,9 @@
 2023-11-07 14:23:57,677 - INFO - data size 778228
 2023-11-07 14:23:57,677 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
 2023-11-07 14:23:57,688 - INFO - Model Accuracy: 0.88
+2023-11-07 14:31:29,290 - INFO - Percentage of good tip data: 61.57%
+2023-11-07 14:31:29,292 - INFO - Percentage of bad tip data: 9.89%
+2023-11-07 14:31:29,292 - INFO - Percentage of zero tip data: 28.54%
+2023-11-07 14:31:29,292 - INFO - data size 778228
+2023-11-07 14:31:29,293 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-07 14:31:29,320 - INFO - Model Accuracy: 0.83

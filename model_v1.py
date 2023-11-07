@@ -325,7 +325,7 @@ def main(visualize=True, save_artifacts=False):
 
     # Show visualization for raw data and model predictions through matplotlib graphs
     if visualize:
-        # visualize the distribution of tips in raw data
+        # visualize the distribution of tips in processed data
         visualize_tip_distribution(merged_data)
 
         # visualize the correlation of tips to rack time in raw data
