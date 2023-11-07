@@ -16,6 +16,7 @@ logging.basicConfig(filename='Data/log.txt', level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
 # load the dataset
+# [issue]: make the order_data and store_Data funtion arguments
 def load_data():
     #order_data = pd.read_csv('Data/order-initial-dataset.csv')
     order_data = pd.read_csv('Data/order_data_10-30.csv')
@@ -26,8 +27,8 @@ def load_data():
 def preprocess_data(order_data, store_data, tip_percentage):
     order_data = order_data[order_data['Destination_type'] == 'Delivery'] #Drop non Delivery orders
     order_data = order_data[~order_data['Source_actor'].isin(['ubereats', 'doordash', 'grubhub'])] # Drop 3rd party aggregetors
-    merged_data = pd.merge(order_data, store_data, on='store_number', how='inner') # Merge two datapoints using Store_dma_id as primary_key
-    merged_data['total_amount_USD'] = merged_data['total_tax_USD'] + merged_data['subtotal_amount_USD'] # Sum post tax
+    merged_data = pd.merge(order_data, store_data, on='store_number', how='inner') # Merge two datapoints using store_number as primary_key
+    merged_data['total_amount_USD'] = merged_data['total_tax_USD'] + merged_data['subtotal_amount_USD'] # Sum post-tax
     merged_data['good_tip'] = merged_data.apply(lambda row: 'TRUE' if row['Tip_USD'] > tip_percentage * row['total_amount_USD'] else ('ZERO' if row['Tip_USD'] == 0 else 'FALSE'), axis=1) # Get good tip 
     
     total_rows = len(merged_data)
@@ -44,14 +45,17 @@ def preprocess_data(order_data, store_data, tip_percentage):
     logging.info("data size %d", merged_data.size)
     return merged_data
 
-import numpy as np
+# [issue]: input validate check percentage_zero_dollar_tip to make sure the user input value !> zero_tip_percentage in dataset
+# [issue]: x_input shout be total_amount_USD not subtotal_amount_USD
+# [issue]: shuffle the dataset during train_test_split, see https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html
 
 def data_loader(merged_data, test_size, percentage_zero_dollar_tip, percentage_bad_tip=None, percentage_good_tip=None):
     logging.info(f'data_loader parameters - test_size: {test_size}, '
                  f'percentage_zero_dollar_tip: {percentage_zero_dollar_tip}, '
                  f'percentage_bad_tip: {percentage_bad_tip}, '
                  f'percentage_good_tip: {percentage_good_tip}')
-    if percentage_zero_dollar_tip > merged_data['Tip_USD'].value_counts(normalize=True).get(0, 0):
+    
+  if percentage_zero_dollar_tip > merged_data['Tip_USD'].value_counts(normalize=True).get(0, 0):
         raise ValueError("Invalid percentage. Not enough data points with zero tips.")
     
     # Filter data based on percentage of zero tips
@@ -96,7 +100,7 @@ def train_model(X_train, X_test, y_train, y_test):
     accuracy = 1 - (mse / y_test.var())
     return model, accuracy
 
-
+# [issue] bar chart should not be generated unless user runs code with -V argument
 def visualize_correlation(merged_data):
     merged_data_copy = merged_data.copy()
 
