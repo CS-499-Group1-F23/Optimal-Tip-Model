@@ -7,8 +7,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
 import seaborn as sns
-import matplotlib.pyplot as plt
 import logging
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+mpl.use('TkAgg')
 
 
 # Set up logging configuration
