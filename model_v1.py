@@ -39,7 +39,10 @@ def preprocess_data(order_data, store_data, tip_percentage, percent_zero):
     # Remove non-delivery orders
     order_data = order_data[order_data['Destination_type'] == 'Delivery']
 
-    # Remove 3rd party aggregators
+    # Remove non-dispatch orders
+    order_data = order_data[order_data['Destination_Channel'] == 'Dispatch']
+
+    # Remove 3rd party aggregators as sources (this allows us to see tip data for deliveries going to marketplace)
     order_data = order_data[~order_data['Source_actor'].isin(['Uber Eats', 'DoorDash', 'Grubhub'])]
 
     # Remove data with negative tips
@@ -175,6 +178,7 @@ def train_gradient_boosting_model(X_train, X_test, y_train, y_test):
     mse = mean_squared_error(y_test, predictions, squared=False)
     accuracy = 1 - (mse / y_test.var())
     return model, accuracy, predictions
+
 
 def create_prediction_csv(X_test, y_test, predictions, prefix):
     file_name = prefix + 'predictions.csv'
@@ -365,7 +369,7 @@ def main(visualize=True, save_artifacts=False):
     # predict how much should be tipped for an order
     predictions = model.predict(X_test)
 
-    create_prediction_csv(X_test, y_test, predictions, prefix = "lr")
+    create_prediction_csv(X_test, y_test, predictions, prefix="lr")
 
     print(f'Model Accuracy: {accuracy:.2f}')
     logging.info(f'Model Accuracy: {accuracy:.2f}')
