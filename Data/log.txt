@@ -444,3 +444,241 @@
 2023-11-07 14:58:16,550 - INFO - data size 778228
 2023-11-07 14:58:16,551 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
 2023-11-07 14:58:16,564 - INFO - Model Accuracy: 0.86
+2023-11-07 22:06:49,435 - INFO - Percentage of good tip data: 61.57%
+2023-11-07 22:06:49,435 - INFO - Percentage of bad tip data: 9.89%
+2023-11-07 22:06:49,435 - INFO - Percentage of zero tip data: 28.54%
+2023-11-07 22:06:49,435 - INFO - data size 778228
+2023-11-07 22:06:49,436 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-07 22:06:49,449 - INFO - Model Accuracy: 0.86
+2023-11-07 22:08:02,380 - INFO - Percentage of good tip data: 61.57%
+2023-11-07 22:08:02,380 - INFO - Percentage of bad tip data: 9.89%
+2023-11-07 22:08:02,380 - INFO - Percentage of zero tip data: 28.54%
+2023-11-07 22:08:02,380 - INFO - data size 778228
+2023-11-07 22:08:02,381 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-07 22:08:14,992 - INFO - Model Accuracy: 0.75
+2023-11-07 22:08:25,356 - INFO - Percentage of good tip data: 61.57%
+2023-11-07 22:08:25,356 - INFO - Percentage of bad tip data: 9.89%
+2023-11-07 22:08:25,356 - INFO - Percentage of zero tip data: 28.54%
+2023-11-07 22:08:25,356 - INFO - data size 778228
+2023-11-07 22:08:25,357 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-07 22:08:35,958 - INFO - Model Accuracy: 0.88
+2023-11-07 22:09:07,709 - INFO - Percentage of good tip data: 61.57%
+2023-11-07 22:09:07,709 - INFO - Percentage of bad tip data: 9.89%
+2023-11-07 22:09:07,709 - INFO - Percentage of zero tip data: 28.54%
+2023-11-07 22:09:07,709 - INFO - data size 778228
+2023-11-07 22:09:07,709 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-07 22:09:18,538 - INFO - Model Accuracy: 0.83
+2023-11-07 22:40:34,658 - INFO - Percentage of good tip data: 61.57%
+2023-11-07 22:40:34,659 - INFO - Percentage of bad tip data: 9.89%
+2023-11-07 22:40:34,660 - INFO - Percentage of zero tip data: 28.54%
+2023-11-07 22:40:34,660 - INFO - data size 778228
+2023-11-07 22:40:34,660 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-07 22:40:45,729 - INFO - Model Accuracy: -0.08
+2023-11-07 22:42:19,290 - INFO - Percentage of good tip data: 61.57%
+2023-11-07 22:42:19,291 - INFO - Percentage of bad tip data: 9.89%
+2023-11-07 22:42:19,291 - INFO - Percentage of zero tip data: 28.54%
+2023-11-07 22:42:19,291 - INFO - data size 778228
+2023-11-07 22:42:19,291 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-07 22:43:20,603 - INFO - Percentage of good tip data: 61.57%
+2023-11-07 22:43:20,604 - INFO - Percentage of bad tip data: 9.89%
+2023-11-07 22:43:20,604 - INFO - Percentage of zero tip data: 28.54%
+2023-11-07 22:43:20,604 - INFO - data size 778228
+2023-11-07 22:43:20,605 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-07 22:44:15,763 - INFO - Percentage of good tip data: 61.57%
+2023-11-07 22:44:15,764 - INFO - Percentage of bad tip data: 9.89%
+2023-11-07 22:44:15,764 - INFO - Percentage of zero tip data: 28.54%
+2023-11-07 22:44:15,764 - INFO - data size 778228
+2023-11-07 22:44:15,764 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-07 22:44:26,419 - INFO - Model Accuracy: -3.43
+2023-11-07 22:46:06,823 - INFO - Percentage of good tip data: 61.57%
+2023-11-07 22:46:06,824 - INFO - Percentage of bad tip data: 9.89%
+2023-11-07 22:46:06,824 - INFO - Percentage of zero tip data: 28.54%
+2023-11-07 22:46:06,824 - INFO - data size 778228
+2023-11-07 22:46:06,825 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-07 22:46:17,729 - INFO - Model Accuracy: 0.82
+2023-11-07 22:48:07,077 - INFO - Percentage of good tip data: 61.57%
+2023-11-07 22:48:07,077 - INFO - Percentage of bad tip data: 9.89%
+2023-11-07 22:48:07,077 - INFO - Percentage of zero tip data: 28.54%
+2023-11-07 22:48:07,077 - INFO - data size 778228
+2023-11-07 22:48:07,078 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-07 22:48:22,009 - INFO - Model Accuracy: 0.89
+2023-11-07 22:54:25,384 - INFO - Percentage of good tip data: 61.57%
+2023-11-07 22:54:25,385 - INFO - Percentage of bad tip data: 9.89%
+2023-11-07 22:54:25,385 - INFO - Percentage of zero tip data: 28.54%
+2023-11-07 22:54:25,385 - INFO - data size 778228
+2023-11-07 22:54:25,385 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-07 22:54:39,524 - INFO - Model Accuracy: 0.75
+2023-11-07 22:55:19,066 - INFO - Percentage of good tip data: 61.57%
+2023-11-07 22:55:19,067 - INFO - Percentage of bad tip data: 9.89%
+2023-11-07 22:55:19,067 - INFO - Percentage of zero tip data: 28.54%
+2023-11-07 22:55:19,067 - INFO - data size 778228
+2023-11-07 22:55:19,067 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-07 22:55:30,299 - INFO - Model Accuracy: 0.93
+2023-11-07 22:58:07,840 - INFO - Percentage of good tip data: 61.57%
+2023-11-07 22:58:07,841 - INFO - Percentage of bad tip data: 9.89%
+2023-11-07 22:58:07,841 - INFO - Percentage of zero tip data: 28.54%
+2023-11-07 22:58:07,841 - INFO - data size 778228
+2023-11-07 22:58:07,841 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-07 22:59:39,741 - INFO - Percentage of good tip data: 61.57%
+2023-11-07 22:59:39,741 - INFO - Percentage of bad tip data: 9.89%
+2023-11-07 22:59:39,741 - INFO - Percentage of zero tip data: 28.54%
+2023-11-07 22:59:39,741 - INFO - data size 778228
+2023-11-07 22:59:39,742 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-08 12:31:05,162 - INFO - Percentage of good tip data: 61.57%
+2023-11-08 12:31:05,162 - INFO - Percentage of bad tip data: 9.89%
+2023-11-08 12:31:05,162 - INFO - Percentage of zero tip data: 28.54%
+2023-11-08 12:31:05,162 - INFO - data size 778228
+2023-11-08 12:31:05,163 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-08 12:32:00,555 - INFO - Percentage of good tip data: 61.57%
+2023-11-08 12:32:00,555 - INFO - Percentage of bad tip data: 9.89%
+2023-11-08 12:32:00,555 - INFO - Percentage of zero tip data: 28.54%
+2023-11-08 12:32:00,555 - INFO - data size 778228
+2023-11-08 12:32:00,556 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-08 12:32:44,192 - INFO - Percentage of good tip data: 61.57%
+2023-11-08 12:32:44,192 - INFO - Percentage of bad tip data: 9.89%
+2023-11-08 12:32:44,192 - INFO - Percentage of zero tip data: 28.54%
+2023-11-08 12:32:44,192 - INFO - data size 778228
+2023-11-08 12:32:44,193 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-08 12:32:57,245 - INFO - Model Accuracy: 0.79
+2023-11-09 17:08:54,698 - INFO - Percentage of good tip data: 61.57%
+2023-11-09 17:08:54,699 - INFO - Percentage of bad tip data: 9.89%
+2023-11-09 17:08:54,699 - INFO - Percentage of zero tip data: 28.54%
+2023-11-09 17:08:54,699 - INFO - data size 778228
+2023-11-09 17:08:54,700 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-09 17:09:06,338 - INFO - Model Accuracy: 0.82
+2023-11-09 17:12:18,036 - INFO - Percentage of good tip data: 61.57%
+2023-11-09 17:12:18,037 - INFO - Percentage of bad tip data: 9.89%
+2023-11-09 17:12:18,037 - INFO - Percentage of zero tip data: 28.54%
+2023-11-09 17:12:18,037 - INFO - data size 778228
+2023-11-09 17:12:18,038 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-09 17:12:29,208 - INFO - Model Accuracy: 0.80
+2023-11-09 17:18:43,448 - INFO - Percentage of good tip data: 61.57%
+2023-11-09 17:18:43,448 - INFO - Percentage of bad tip data: 9.89%
+2023-11-09 17:18:43,448 - INFO - Percentage of zero tip data: 28.54%
+2023-11-09 17:18:43,448 - INFO - data size 778228
+2023-11-09 17:18:43,448 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-09 17:18:54,754 - INFO - Model Accuracy: 0.87
+2023-11-09 17:37:31,743 - INFO - Percentage of good tip data: 61.57%
+2023-11-09 17:37:31,744 - INFO - Percentage of bad tip data: 9.89%
+2023-11-09 17:37:31,744 - INFO - Percentage of zero tip data: 28.54%
+2023-11-09 17:37:31,744 - INFO - data size 778228
+2023-11-09 17:37:31,744 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-09 17:37:43,036 - INFO - Model Accuracy: 0.27
+2023-11-16 16:21:16,536 - INFO - Percentage of good tip data: 61.57%
+2023-11-16 16:21:16,537 - INFO - Percentage of bad tip data: 9.89%
+2023-11-16 16:21:16,537 - INFO - Percentage of zero tip data: 28.54%
+2023-11-16 16:21:16,537 - INFO - data size 778228
+2023-11-16 16:21:16,538 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-16 16:21:16,543 - INFO - Model Accuracy: 0.83
+2023-11-16 16:22:01,476 - INFO - Percentage of good tip data: 61.57%
+2023-11-16 16:22:01,476 - INFO - Percentage of bad tip data: 9.89%
+2023-11-16 16:22:01,476 - INFO - Percentage of zero tip data: 28.54%
+2023-11-16 16:22:01,476 - INFO - data size 778228
+2023-11-16 16:22:01,477 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-16 16:22:01,489 - INFO - Model Accuracy: 0.78
+2023-11-16 16:22:07,452 - INFO - Percentage of good tip data: 61.57%
+2023-11-16 16:22:07,452 - INFO - Percentage of bad tip data: 9.89%
+2023-11-16 16:22:07,452 - INFO - Percentage of zero tip data: 28.54%
+2023-11-16 16:22:07,452 - INFO - data size 778228
+2023-11-16 16:22:07,453 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-16 16:22:07,458 - INFO - Model Accuracy: 0.89
+2023-11-16 16:22:10,534 - INFO - Percentage of good tip data: 61.57%
+2023-11-16 16:22:10,534 - INFO - Percentage of bad tip data: 9.89%
+2023-11-16 16:22:10,534 - INFO - Percentage of zero tip data: 28.54%
+2023-11-16 16:22:10,534 - INFO - data size 778228
+2023-11-16 16:22:10,536 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-16 16:22:10,542 - INFO - Model Accuracy: 0.80
+2023-11-16 16:22:13,563 - INFO - Percentage of good tip data: 61.57%
+2023-11-16 16:22:13,563 - INFO - Percentage of bad tip data: 9.89%
+2023-11-16 16:22:13,563 - INFO - Percentage of zero tip data: 28.54%
+2023-11-16 16:22:13,563 - INFO - data size 778228
+2023-11-16 16:22:13,564 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-16 16:22:13,570 - INFO - Model Accuracy: 0.73
+2023-11-16 16:26:15,560 - INFO - Percentage of good tip data: 61.57%
+2023-11-16 16:26:15,561 - INFO - Percentage of bad tip data: 9.89%
+2023-11-16 16:26:15,561 - INFO - Percentage of zero tip data: 28.54%
+2023-11-16 16:26:15,561 - INFO - data size 778228
+2023-11-16 16:26:15,562 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-16 16:26:15,577 - INFO - Model Accuracy: 0.79
+2023-11-16 16:28:35,943 - INFO - Percentage of good tip data: 61.47%
+2023-11-16 16:28:35,943 - INFO - Percentage of bad tip data: 9.91%
+2023-11-16 16:28:35,943 - INFO - Percentage of zero tip data: 28.62%
+2023-11-16 16:28:35,943 - INFO - data size 776270
+2023-11-16 16:28:35,944 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-16 16:28:35,957 - INFO - Model Accuracy: 0.86
+2023-11-16 16:29:24,632 - INFO - Percentage of good tip data: 61.47%
+2023-11-16 16:29:24,632 - INFO - Percentage of bad tip data: 9.91%
+2023-11-16 16:29:24,632 - INFO - Percentage of zero tip data: 28.62%
+2023-11-16 16:29:24,632 - INFO - data size 776270
+2023-11-16 16:29:24,633 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-16 16:29:36,238 - INFO - Percentage of good tip data: 61.47%
+2023-11-16 16:29:36,238 - INFO - Percentage of bad tip data: 9.91%
+2023-11-16 16:29:36,238 - INFO - Percentage of zero tip data: 28.62%
+2023-11-16 16:29:36,238 - INFO - data size 776270
+2023-11-16 16:29:36,239 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-16 16:29:36,253 - INFO - Model Accuracy: 0.86
+2023-11-16 16:29:59,657 - INFO - Percentage of good tip data: 61.47%
+2023-11-16 16:29:59,657 - INFO - Percentage of bad tip data: 9.91%
+2023-11-16 16:29:59,657 - INFO - Percentage of zero tip data: 28.62%
+2023-11-16 16:29:59,657 - INFO - data size 776270
+2023-11-16 16:29:59,659 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-16 16:29:59,691 - INFO - Model Accuracy: 0.90
+2023-11-16 16:31:35,722 - INFO - Percentage of good tip data: 61.47%
+2023-11-16 16:31:35,722 - INFO - Percentage of bad tip data: 9.91%
+2023-11-16 16:31:35,722 - INFO - Percentage of zero tip data: 28.62%
+2023-11-16 16:31:35,722 - INFO - data size 776270
+2023-11-16 16:31:35,723 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-16 16:41:41,148 - INFO - Percentage of good tip data: 61.47%
+2023-11-16 16:41:41,149 - INFO - Percentage of bad tip data: 9.91%
+2023-11-16 16:41:41,149 - INFO - Percentage of zero tip data: 28.62%
+2023-11-16 16:41:41,149 - INFO - data size 776270
+2023-11-16 16:41:41,149 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-16 16:41:41,164 - INFO - Model Accuracy: 0.88
+2023-11-16 16:41:41,240 - INFO - Random Forest Model Accuracy: 0.91
+2023-11-16 16:43:45,103 - INFO - Percentage of good tip data: 61.47%
+2023-11-16 16:43:45,103 - INFO - Percentage of bad tip data: 9.91%
+2023-11-16 16:43:45,103 - INFO - Percentage of zero tip data: 28.62%
+2023-11-16 16:43:45,103 - INFO - data size 776270
+2023-11-16 16:43:45,104 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-16 16:43:45,117 - INFO - Model Accuracy: 0.88
+2023-11-16 16:43:45,202 - INFO - Random Forest Model Accuracy: 0.89
+2023-11-16 16:48:25,632 - INFO - Percentage of good tip data: 61.47%
+2023-11-16 16:48:25,632 - INFO - Percentage of bad tip data: 9.91%
+2023-11-16 16:48:25,632 - INFO - Percentage of zero tip data: 28.62%
+2023-11-16 16:48:25,632 - INFO - data size 776270
+2023-11-16 16:48:25,632 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-16 16:48:25,645 - INFO - Model Accuracy: 0.82
+2023-11-16 16:48:25,731 - INFO - Random Forest Model Accuracy: 0.77
+2023-11-16 16:48:25,761 - INFO - Gradient Boosting Model Accuracy: 0.79
+2023-11-16 17:33:24,439 - INFO - Percentage of good tip data: 61.47%
+2023-11-16 17:33:24,440 - INFO - Percentage of bad tip data: 9.91%
+2023-11-16 17:33:24,440 - INFO - Percentage of zero tip data: 28.62%
+2023-11-16 17:33:24,440 - INFO - data size 776270
+2023-11-16 17:33:24,440 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-16 17:33:24,453 - INFO - Model Accuracy: 0.90
+2023-11-16 17:33:24,538 - INFO - Random Forest Model Accuracy: 0.89
+2023-11-16 17:33:24,567 - INFO - Gradient Boosting Model Accuracy: 0.89
+2023-11-16 17:33:38,927 - INFO - Percentage of good tip data: 61.47%
+2023-11-16 17:33:38,928 - INFO - Percentage of bad tip data: 9.91%
+2023-11-16 17:33:38,928 - INFO - Percentage of zero tip data: 28.62%
+2023-11-16 17:33:38,928 - INFO - data size 776270
+2023-11-16 17:33:38,928 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-16 17:33:38,945 - INFO - Model Accuracy: 0.85
+2023-11-16 17:33:39,041 - INFO - Random Forest Model Accuracy: 0.85
+2023-11-16 17:33:39,070 - INFO - Gradient Boosting Model Accuracy: 0.86
+2023-11-16 17:33:42,068 - INFO - Percentage of good tip data: 61.47%
+2023-11-16 17:33:42,068 - INFO - Percentage of bad tip data: 9.91%
+2023-11-16 17:33:42,068 - INFO - Percentage of zero tip data: 28.62%
+2023-11-16 17:33:42,068 - INFO - data size 776270
+2023-11-16 17:33:42,068 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-16 17:33:42,076 - INFO - Model Accuracy: 0.89
+2023-11-16 17:33:42,153 - INFO - Random Forest Model Accuracy: 0.90
+2023-11-16 17:33:42,182 - INFO - Gradient Boosting Model Accuracy: 0.91
+2023-11-16 17:33:44,856 - INFO - Percentage of good tip data: 61.47%
+2023-11-16 17:33:44,857 - INFO - Percentage of bad tip data: 9.91%
+2023-11-16 17:33:44,857 - INFO - Percentage of zero tip data: 28.62%
+2023-11-16 17:33:44,857 - INFO - data size 776270
+2023-11-16 17:33:44,857 - INFO - data_loader parameters - test_size: 0.2, percentage_zero_dollar_tip: 0.1, percentage_bad_tip: 0.3, percentage_good_tip: 0.6
+2023-11-16 17:33:44,866 - INFO - Model Accuracy: 0.88
+2023-11-16 17:33:44,947 - INFO - Random Forest Model Accuracy: 0.86
+2023-11-16 17:33:44,977 - INFO - Gradient Boosting Model Accuracy: 0.87
