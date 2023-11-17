@@ -4,12 +4,15 @@ from datetime import datetime
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
 import seaborn as sns
 import logging
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+from sklearn.model_selection import KFold
+
 mpl.use('TkAgg')
 
 # Set up logging configuration
@@ -45,6 +48,9 @@ def preprocess_data(order_data, store_data, tip_percentage, percent_zero):
     # Remove data with negative or null rack time
     order_data = order_data[~order_data['Rack_time'].isnull()]
     order_data = order_data[order_data['Rack_time'] >= 0]
+
+    # Remove data with Tip_USD values above $75
+    order_data = order_data[order_data['Tip_USD'] <= 75]
 
     # Merge two datapoints using store_number as primary_key
     merged_data = pd.merge(order_data, store_data, on='store_number', how='inner')
@@ -123,9 +129,17 @@ def data_loader(merged_data, test_size, percentage_zero_dollar_tip, percentage_b
 
     X = merged_data[['store_number', 'total_amount_USD']]
     y = merged_data['Tip_USD']
-    print(len(X), len(y))
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42, shuffle=True)
 
+    n_splits= 10 # number of folds
+
+    kf = KFold(n_splits=n_splits, shuffle=True, random_state=42)
+    fold_results = []
+
+    for train_index, test_index in kf.split(X):
+        X_train, X_test = X.iloc[train_index], X.iloc[test_index]
+        y_train, y_test = y.iloc[train_index], y.iloc[test_index]
+
+    print(X_test.size)
     return X_train, X_test, y_train, y_test
 
 
@@ -141,6 +155,32 @@ def train_linear_model(X_train, X_test, y_train, y_test):
     mse = mean_squared_error(y_test, predictions, squared=False)
     accuracy = 1 - (mse / y_test.var())
     return model, accuracy
+
+# Function to train a Random Forest model
+def train_random_forest_model(X_train, X_test, y_train, y_test):
+    model = RandomForestRegressor(n_estimators=100, random_state=42)
+    model.fit(X_train, y_train)
+    predictions = model.predict(X_test)
+    mse = mean_squared_error(y_test, predictions, squared=False)
+    accuracy = 1 - (mse / y_test.var())
+    return model, accuracy, predictions
+
+
+# TODO increase number of estimators, add searly stopping, tree depths varyying/capping 
+# Function to train a Gradient Boosting model
+def train_gradient_boosting_model(X_train, X_test, y_train, y_test):
+    model = GradientBoostingRegressor(n_estimators=100, learning_rate=0.01, random_state=42)
+    model.fit(X_train, y_train)
+    predictions = model.predict(X_test)
+    mse = mean_squared_error(y_test, predictions, squared=False)
+    accuracy = 1 - (mse / y_test.var())
+    return model, accuracy, predictions
+
+def create_prediction_csv(X_test, y_test, predictions, prefix):
+    file_name = prefix + 'predictions.csv'
+    results = pd.DataFrame({'Total_Amount_USD': X_test['total_amount_USD'], 'Actual_Tip_USD': y_test, 'Predicted_Tip_USD': predictions})
+    results.to_csv(file_name, index=False)
+    print(f"Predictions saved to '{file_name}'.")
 
 
 # visualize_correlation() Function:
@@ -321,8 +361,26 @@ def main(visualize=True, save_artifacts=False):
 
     # Train the model, log relative accuracy with the given input data
     model, accuracy = train_linear_model(X_train, X_test, y_train, y_test)
+    
+    # predict how much should be tipped for an order
+    predictions = model.predict(X_test)
+
+    create_prediction_csv(X_test, y_test, predictions, prefix = "lr")
+
     print(f'Model Accuracy: {accuracy:.2f}')
     logging.info(f'Model Accuracy: {accuracy:.2f}')
+
+    model_rf, accuracy_rf, predictions_rf = train_random_forest_model(X_train, X_test, y_train, y_test)
+    print(f'Random Forest Model Accuracy: {accuracy_rf:.2f}')
+    logging.info(f'Random Forest Model Accuracy: {accuracy_rf:.2f}')
+
+    create_prediction_csv(X_test, y_test, predictions_rf, prefix = "rf")
+
+    # Train the Gradient Boosting model
+    model_gb, accuracy_gb, predictions_gb = train_gradient_boosting_model(X_train, X_test, y_train, y_test)
+    print(f'Gradient Boosting Model Accuracy: {accuracy_gb:.2f}')
+    logging.info(f'Gradient Boosting Model Accuracy: {accuracy_gb:.2f}')
+    create_prediction_csv(X_test, y_test, predictions_gb, prefix = "gb")
 
     # Save merged_data to a CSV file with the specified naming convention
     if save_artifacts:
