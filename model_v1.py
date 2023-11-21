@@ -67,6 +67,13 @@ def preprocess_data(order_data, store_data, tip_percentage, percent_zero):
         if row['Tip_USD'] > tip_percentage * row['total_amount_USD']
         else ('ZERO' if row['Tip_USD'] == 0 else 'FALSE')
         , axis=1)
+    
+        # List of columns to one-hot encode
+    columns_to_encode = ['Store_dma_id_x', 'store_number', 'Store_postal_code', 'Store_zip4_code',
+                         'Businesses', 'Store_locale_name']
+
+    # Perform one-hot encoding
+    merged_data = pd.get_dummies(merged_data, columns=columns_to_encode)
 
     # Log data statistics
     total_rows = len(merged_data)
@@ -95,7 +102,7 @@ def preprocess_data(order_data, store_data, tip_percentage, percent_zero):
 # Load data instances to be fed to the model for training and testing based on the merged data.
 # Input: Preprocessed (merged) data, test size, percent of zero tips, percent bad tips, percent good tips
 # Output: Data instances for model training and testing
-def data_loader(merged_data, test_size, percentage_zero_dollar_tip, percentage_bad_tip=None, percentage_good_tip=None):
+def data_loader_old(merged_data, test_size, percentage_zero_dollar_tip, percentage_bad_tip=None, percentage_good_tip=None):
     logging.info(f'data_loader parameters - test_size: {test_size}, '
                  f'percentage_zero_dollar_tip: {percentage_zero_dollar_tip}, '
                  f'percentage_bad_tip: {percentage_bad_tip}, '
@@ -130,7 +137,7 @@ def data_loader(merged_data, test_size, percentage_zero_dollar_tip, percentage_b
         good_tip_indices_to_keep = good_tip_indices[:num_good_tips_to_keep]
         merged_data = merged_data.loc[good_tip_indices_to_keep]
 
-    X = merged_data[['store_number', 'total_amount_USD']]
+    X = merged_data[['store_number', 'total_amount_USD', 'Rack_time']]
     y = merged_data['Tip_USD']
 
     n_splits= 10 # number of folds
@@ -144,6 +151,68 @@ def data_loader(merged_data, test_size, percentage_zero_dollar_tip, percentage_b
 
     print(X_test.size)
     return X_train, X_test, y_train, y_test
+
+def data_loader(data):
+    # Features for predicting rack time (starting with default columns)
+    features = [
+        'total_amount_USD', 'Tip_USD', 'Area_sqmi', 'Avg_income']
+    features.sort()
+    # Identify columns with specific prefixes and add them to the features list
+    for column in data.columns:
+        if column.startswith('Businesses') or column.startswith('Store_postal_code') \
+                or column.startswith('Store_zip4_code') or column.startswith('Store_dma_id')or column.startswith('Store_locale_name'):
+            features.append(column)
+
+    # Select features and target variable (Rack_time)
+    X = data[features]
+    y = data['Rack_time']
+
+    n_splits= 10 # number of folds
+
+    kf = KFold(n_splits=n_splits, shuffle=True, random_state=42)
+    fold_results = []
+    
+    for train_index, test_index in kf.split(X):
+        X_train, X_test = X.iloc[train_index], X.iloc[test_index]
+        y_train, y_test = y.iloc[train_index], y.iloc[test_index]
+    return X_train, X_test, y_train, y_test, features
+
+
+def tip_data_loader(data, threshold_rack_time):
+    # Filter data for predicted rack times above the threshold
+    data_filtered = data[data['predicted_rack_time'] > threshold_rack_time]
+
+    # Features for predicting tips
+    tip_features = [
+        'total_amount_USD', 'Area_sqmi', 'Avg_income']
+    for column in data.columns:
+        if column.startswith('Businesses') or column.startswith('Store_postal_code') \
+            or column.startswith('Store_zip4_code') or column.startswith('Store_dma_id') \
+            or column.startswith('Store_locale_name'):
+            tip_features.append(column)
+
+    X = data_filtered[tip_features]
+    y = data_filtered['Tip_USD']  # Target variable: Tip amount
+
+    n_splits = 10
+
+    kf = KFold(n_splits= n_splits, shuffle=True, random_state=42)
+    fold_results = []
+    
+    for train_index, test_index in kf.split(X):
+        X_train, X_test = X.iloc[train_index], X.iloc[test_index]
+        y_train, y_test = y.iloc[train_index], y.iloc[test_index]
+
+    return X_train, X_test, y_train, y_test
+
+
+def train_linear_regression(X_train, y_train):
+    # TODO: add bias?
+    # Initialize and train the linear regression model
+    lr_model = LinearRegression()
+    lr_model.fit(X_train, y_train)
+
+    return lr_model
 
 
 # train_linear_model() Function:
@@ -332,8 +401,8 @@ def visualize_predictions(X_test, y_test, predictions, accuracy, good_tip, perce
 # These defaults can be changed with input arguments in the command line.
 def main(visualize=True, save_artifacts=False):
     # Define Order and Store data CSV file locations
-    order_source = 'Data/order_data_10-30.csv'
-    store_source = 'Data/store_data_10-16.csv'
+    order_source = 'Data/dispatch_order_data.csv'
+    store_source = 'Data/dispatch_store_data.csv'
 
     # Define the distribution of good tips to bad tips to zero dollar tips for the model training
     percent_good = 0.6
@@ -357,34 +426,73 @@ def main(visualize=True, save_artifacts=False):
 
     # Preprocess data, then load the model data instances for the training and testing
     merged_data = preprocess_data(order_data, store_data, tip_percentage=good_tip_definition, percent_zero=percent_zero)
-    X_train, X_test, y_train, y_test = data_loader(merged_data,
-                                                   test_size=test_size,
-                                                   percentage_good_tip=percent_good,
-                                                   percentage_bad_tip=percent_bad,
-                                                   percentage_zero_dollar_tip=percent_zero)
+    X_train, X_test, y_train, y_test, features_for_rack_time_prediction  = data_loader(merged_data)
+    # X_train, X_test, y_train, y_test = data_loader(merged_data,
+    #                                                test_size=test_size,
+    #                                                percentage_good_tip=percent_good,
+    #                                                percentage_bad_tip=percent_bad,
+    #                                                percentage_zero_dollar_tip=percent_zero)
+    y_train_log = np.log1p(y_train)  # Logarithmic transformation for training set
+    y_test_log = np.log1p(y_test)
+    log_model = LinearRegression()
+    log_model.fit(X_train, y_train_log)
+    predictions_log = log_model.predict(X_test)
+    predictions = np.expm1(predictions_log)  # Inverse transformation from logarithmic scale
+    mse = mean_squared_error(y_test, predictions)
+    model = train_linear_regression(X_train, y_train)
+    print(f"Log Mean Squared Error: {mse}")
+    threshold_value_log = np.median(predictions)  # Using median as the threshold value for logarithmic predictions
+    print(f"Threshold Value based on Predicted Rack Time (using logarithmic regression): {threshold_value_log}")
 
-    # Train the model, log relative accuracy with the given input data
-    model, accuracy = train_linear_model(X_train, X_test, y_train, y_test)
-    
-    # predict how much should be tipped for an order
+    model.fit(X_train, y_train)
+
+    # Predict on the test set
     predictions = model.predict(X_test)
 
-    create_prediction_csv(X_test, y_test, predictions, prefix="lr")
+    # Calculate mean squared error
+    mse = mean_squared_error(y_test, predictions)
+    print(f"Mean Squared Error: {mse}")
 
-    print(f'Model Accuracy: {accuracy:.2f}')
-    logging.info(f'Model Accuracy: {accuracy:.2f}')
+    # Calculate threshold value based on the predicted rack time
+    threshold_value = predictions.mean()  # Using mean as a simple threshold example
+    print(f"Threshold Value based on Predicted Rack Time (using mean): {threshold_value}")
+    threshold_value = np.median(predictions)  # Using median as the threshold value
+    print(f"Threshold Value based on Predicted Rack Time (using median): {threshold_value}")
 
-    model_rf, accuracy_rf, predictions_rf = train_random_forest_model(X_train, X_test, y_train, y_test)
-    print(f'Random Forest Model Accuracy: {accuracy_rf:.2f}')
-    logging.info(f'Random Forest Model Accuracy: {accuracy_rf:.2f}')
 
-    create_prediction_csv(X_test, y_test, predictions_rf, prefix = "rf")
+    merged_data['predicted_rack_time'] = model.predict(merged_data[features_for_rack_time_prediction])
+    merged_data.to_csv("test.csv", index=False)
+    X_train_tip, X_test_tip, y_train_tip, y_test_tip = tip_data_loader(merged_data, threshold_value)
+    
+    model = train_linear_regression(X_train_tip, y_train_tip)
+    # Predict on the test set
+    tip_predictions = model.predict(X_test_tip)
 
-    # Train the Gradient Boosting model
-    model_gb, accuracy_gb, predictions_gb = train_gradient_boosting_model(X_train, X_test, y_train, y_test)
-    print(f'Gradient Boosting Model Accuracy: {accuracy_gb:.2f}')
-    logging.info(f'Gradient Boosting Model Accuracy: {accuracy_gb:.2f}')
-    create_prediction_csv(X_test, y_test, predictions_gb, prefix = "gb")
+    # Calculate MSE for tip predictions
+    tip_mse = mean_squared_error(y_test_tip, tip_predictions)
+    print(f"Mean Squared Error for Tip Prediction: {tip_mse}")
+    # # Train the model, log relative accuracy with the given input data
+    # model, accuracy = train_linear_model(X_train, X_test, y_train, y_test)
+    
+    # # predict how much should be tipped for an order
+    # predictions = model.predict(X_test)
+
+    # create_prediction_csv(X_test, y_test, predictions, prefix="lr")
+
+    # print(f'Model Accuracy: {accuracy:.2f}')
+    # logging.info(f'Model Accuracy: {accuracy:.2f}')
+
+    # model_rf, accuracy_rf, predictions_rf = train_random_forest_model(X_train, X_test, y_train, y_test)
+    # print(f'Random Forest Model Accuracy: {accuracy_rf:.2f}')
+    # logging.info(f'Random Forest Model Accuracy: {accuracy_rf:.2f}')
+
+    # create_prediction_csv(X_test, y_test, predictions_rf, prefix = "rf")
+
+    # # Train the Gradient Boosting model
+    # model_gb, accuracy_gb, predictions_gb = train_gradient_boosting_model(X_train, X_test, y_train, y_test)
+    # print(f'Gradient Boosting Model Accuracy: {accuracy_gb:.2f}')
+    # logging.info(f'Gradient Boosting Model Accuracy: {accuracy_gb:.2f}')
+    # create_prediction_csv(X_test, y_test, predictions_gb, prefix = "gb")
 
     # Save merged_data to a CSV file with the specified naming convention
     if save_artifacts:
