@@ -839,3 +839,101 @@
 2023-11-21 00:11:14,436 - INFO - Percentage of bad tip data: 14.01%
 2023-11-21 00:11:14,436 - INFO - Percentage of zero tip data: 29.84%
 2023-11-21 00:11:14,436 - INFO - data size 998280
+2023-11-21 13:26:55,444 - INFO - Percentage of good tip data: 56.15%
+2023-11-21 13:26:55,444 - INFO - Percentage of bad tip data: 14.01%
+2023-11-21 13:26:55,444 - INFO - Percentage of zero tip data: 29.84%
+2023-11-21 13:26:55,444 - INFO - data size 998280
+2023-11-21 14:21:18,437 - INFO - Percentage of good tip data: 56.15%
+2023-11-21 14:21:18,437 - INFO - Percentage of bad tip data: 14.01%
+2023-11-21 14:21:18,437 - INFO - Percentage of zero tip data: 29.84%
+2023-11-21 14:21:18,437 - INFO - data size 998280
+2023-11-21 14:23:15,210 - INFO - Percentage of good tip data: 56.15%
+2023-11-21 14:23:15,211 - INFO - Percentage of bad tip data: 14.01%
+2023-11-21 14:23:15,211 - INFO - Percentage of zero tip data: 29.84%
+2023-11-21 14:23:15,211 - INFO - data size 998280
+2023-11-21 14:26:24,690 - INFO - Percentage of good tip data: 56.15%
+2023-11-21 14:26:24,690 - INFO - Percentage of bad tip data: 14.01%
+2023-11-21 14:26:24,690 - INFO - Percentage of zero tip data: 29.84%
+2023-11-21 14:26:24,690 - INFO - data size 998280
+2023-11-21 14:26:26,308 - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 14:26:26,312 - WARNING - There is a known slowdown when using v2.11+ Keras optimizers on M1/M2 Macs. Falling back to the legacy Keras optimizer, i.e., `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 14:32:25,691 - INFO - Percentage of good tip data: 56.15%
+2023-11-21 14:32:25,691 - INFO - Percentage of bad tip data: 14.01%
+2023-11-21 14:32:25,691 - INFO - Percentage of zero tip data: 29.84%
+2023-11-21 14:32:25,691 - INFO - data size 998280
+2023-11-21 14:32:26,759 - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 14:32:26,764 - WARNING - There is a known slowdown when using v2.11+ Keras optimizers on M1/M2 Macs. Falling back to the legacy Keras optimizer, i.e., `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 14:40:55,099 - INFO - Percentage of good tip data: 56.15%
+2023-11-21 14:40:55,100 - INFO - Percentage of bad tip data: 14.01%
+2023-11-21 14:40:55,100 - INFO - Percentage of zero tip data: 29.84%
+2023-11-21 14:40:55,100 - INFO - data size 998280
+2023-11-21 14:40:56,131 - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 14:40:56,136 - WARNING - There is a known slowdown when using v2.11+ Keras optimizers on M1/M2 Macs. Falling back to the legacy Keras optimizer, i.e., `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 14:42:30,037 - INFO - Percentage of good tip data: 56.15%
+2023-11-21 14:42:30,037 - INFO - Percentage of bad tip data: 14.01%
+2023-11-21 14:42:30,037 - INFO - Percentage of zero tip data: 29.84%
+2023-11-21 14:42:30,037 - INFO - data size 998280
+2023-11-21 14:42:31,049 - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 14:42:31,054 - WARNING - There is a known slowdown when using v2.11+ Keras optimizers on M1/M2 Macs. Falling back to the legacy Keras optimizer, i.e., `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 14:56:24,009 - INFO - Percentage of good tip data: 56.15%
+2023-11-21 14:56:24,010 - INFO - Percentage of bad tip data: 14.01%
+2023-11-21 14:56:24,010 - INFO - Percentage of zero tip data: 29.84%
+2023-11-21 14:56:24,010 - INFO - data size 998280
+2023-11-21 14:56:25,040 - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 14:56:25,045 - WARNING - There is a known slowdown when using v2.11+ Keras optimizers on M1/M2 Macs. Falling back to the legacy Keras optimizer, i.e., `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 14:58:42,382 - INFO - Percentage of good tip data: 56.15%
+2023-11-21 14:58:42,382 - INFO - Percentage of bad tip data: 14.01%
+2023-11-21 14:58:42,382 - INFO - Percentage of zero tip data: 29.84%
+2023-11-21 14:58:42,382 - INFO - data size 998280
+2023-11-21 14:58:43,471 - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 14:58:43,476 - WARNING - There is a known slowdown when using v2.11+ Keras optimizers on M1/M2 Macs. Falling back to the legacy Keras optimizer, i.e., `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 15:02:14,751 - INFO - Percentage of good tip data: 56.15%
+2023-11-21 15:02:14,751 - INFO - Percentage of bad tip data: 14.01%
+2023-11-21 15:02:14,751 - INFO - Percentage of zero tip data: 29.84%
+2023-11-21 15:02:14,751 - INFO - data size 998280
+2023-11-21 15:02:15,775 - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 15:02:15,780 - WARNING - There is a known slowdown when using v2.11+ Keras optimizers on M1/M2 Macs. Falling back to the legacy Keras optimizer, i.e., `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 15:05:40,590 - INFO - Percentage of good tip data: 56.15%
+2023-11-21 15:05:40,590 - INFO - Percentage of bad tip data: 14.01%
+2023-11-21 15:05:40,590 - INFO - Percentage of zero tip data: 29.84%
+2023-11-21 15:05:40,591 - INFO - data size 998280
+2023-11-21 15:05:41,838 - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 15:05:41,843 - WARNING - There is a known slowdown when using v2.11+ Keras optimizers on M1/M2 Macs. Falling back to the legacy Keras optimizer, i.e., `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 15:13:07,364 - INFO - Percentage of good tip data: 56.15%
+2023-11-21 15:13:07,364 - INFO - Percentage of bad tip data: 14.01%
+2023-11-21 15:13:07,364 - INFO - Percentage of zero tip data: 29.84%
+2023-11-21 15:13:07,364 - INFO - data size 998280
+2023-11-21 15:13:08,433 - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 15:13:08,438 - WARNING - There is a known slowdown when using v2.11+ Keras optimizers on M1/M2 Macs. Falling back to the legacy Keras optimizer, i.e., `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 15:15:56,780 - INFO - Percentage of good tip data: 56.15%
+2023-11-21 15:15:56,780 - INFO - Percentage of bad tip data: 14.01%
+2023-11-21 15:15:56,780 - INFO - Percentage of zero tip data: 29.84%
+2023-11-21 15:15:56,780 - INFO - data size 998280
+2023-11-21 15:15:57,838 - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 15:15:57,843 - WARNING - There is a known slowdown when using v2.11+ Keras optimizers on M1/M2 Macs. Falling back to the legacy Keras optimizer, i.e., `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 15:17:06,217 - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 15:17:06,219 - WARNING - There is a known slowdown when using v2.11+ Keras optimizers on M1/M2 Macs. Falling back to the legacy Keras optimizer, i.e., `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 15:40:27,071 - INFO - Percentage of good tip data: 56.15%
+2023-11-21 15:40:27,071 - INFO - Percentage of bad tip data: 14.01%
+2023-11-21 15:40:27,071 - INFO - Percentage of zero tip data: 29.84%
+2023-11-21 15:40:27,071 - INFO - data size 998280
+2023-11-21 15:40:28,167 - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 15:40:28,172 - WARNING - There is a known slowdown when using v2.11+ Keras optimizers on M1/M2 Macs. Falling back to the legacy Keras optimizer, i.e., `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 15:41:36,607 - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 15:41:36,608 - WARNING - There is a known slowdown when using v2.11+ Keras optimizers on M1/M2 Macs. Falling back to the legacy Keras optimizer, i.e., `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 15:46:48,591 - INFO - Percentage of good tip data: 56.15%
+2023-11-21 15:46:48,592 - INFO - Percentage of bad tip data: 14.01%
+2023-11-21 15:46:48,592 - INFO - Percentage of zero tip data: 29.84%
+2023-11-21 15:46:48,592 - INFO - data size 998280
+2023-11-21 15:46:49,649 - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 15:46:49,653 - WARNING - There is a known slowdown when using v2.11+ Keras optimizers on M1/M2 Macs. Falling back to the legacy Keras optimizer, i.e., `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 15:48:01,277 - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 15:48:01,278 - WARNING - There is a known slowdown when using v2.11+ Keras optimizers on M1/M2 Macs. Falling back to the legacy Keras optimizer, i.e., `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 15:48:55,701 - INFO - Percentage of good tip data: 56.15%
+2023-11-21 15:48:55,701 - INFO - Percentage of bad tip data: 14.01%
+2023-11-21 15:48:55,701 - INFO - Percentage of zero tip data: 29.84%
+2023-11-21 15:48:55,701 - INFO - data size 998280
+2023-11-21 15:48:56,835 - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 15:48:56,839 - WARNING - There is a known slowdown when using v2.11+ Keras optimizers on M1/M2 Macs. Falling back to the legacy Keras optimizer, i.e., `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 15:50:06,069 - WARNING - At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+2023-11-21 15:50:06,071 - WARNING - There is a known slowdown when using v2.11+ Keras optimizers on M1/M2 Macs. Falling back to the legacy Keras optimizer, i.e., `tf.keras.optimizers.legacy.Adam`.

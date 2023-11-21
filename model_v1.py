@@ -3,10 +3,15 @@ import os
 from datetime import datetime
 import pandas as pd
 import numpy as np
+import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Conv1D, MaxPooling1D, Flatten, Dropout
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 import seaborn as sns
 import logging
 import matplotlib.pyplot as plt
@@ -14,6 +19,36 @@ import matplotlib as mpl
 from sklearn.model_selection import KFold
 
 mpl.use('TkAgg')
+
+# Predefined hyperparameters (modifiable)
+num_filters = 64
+kernel_size = 3
+pool_size = 2
+dropout_rate = 0.5
+dense_units = 64
+learning_rate = 0.0001
+batch_size = 32
+epochs = 10
+
+def create_cnn(input_shape):
+    model = Sequential([
+        Conv1D(num_filters, kernel_size, activation='relu', input_shape=input_shape),
+        MaxPooling1D(pool_size=pool_size),
+        Flatten(),
+        Dense(dense_units, activation='relu'),
+        Dropout(dropout_rate),
+        Dense(1)  # Output layer for regression
+    ])
+    return model
+
+
+class TerminalColors:
+    RED = '\033[91m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    BLUE = '\033[94m'
+    END = '\033[0m'
+
 
 # Set up logging configuration
 logging.basicConfig(filename='Data/log.txt', level=logging.INFO,
@@ -166,6 +201,8 @@ def data_loader(data):
     # Select features and target variable (Rack_time)
     X = data[features]
     y = data['Rack_time']
+    
+    print("Input data dimensions (samples, features):", X.shape)  # Print input data dimensions
 
     n_splits= 10 # number of folds
 
@@ -184,7 +221,7 @@ def tip_data_loader(data, threshold_rack_time):
 
     # Features for predicting tips
     tip_features = [
-        'total_amount_USD', 'Area_sqmi', 'Avg_income']
+        'total_amount_USD', 'Area_sqmi', 'Avg_income','predicted_rack_time']
     for column in data.columns:
         if column.startswith('Businesses') or column.startswith('Store_postal_code') \
             or column.startswith('Store_zip4_code') or column.startswith('Store_dma_id') \
@@ -214,6 +251,33 @@ def train_linear_regression(X_train, y_train):
 
     return lr_model
 
+def train_cnn(X_train, X_test, y_train, y_test):
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)
+    
+    input_shape = (X_train_scaled.shape[1], 1)  # Define input shape for CNN
+    
+    X_train_scaled = X_train_scaled.reshape(X_train_scaled.shape[0], X_train_scaled.shape[1], 1)
+    X_test_scaled = X_test_scaled.reshape(X_test_scaled.shape[0], X_test_scaled.shape[1], 1)
+    
+    model = create_cnn(input_shape)
+    optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
+    
+    model.compile(loss='mean_squared_error', optimizer=optimizer)
+    # history = model.fit(X_train_scaled, y_train, batch_size=batch_size, epochs=epochs, 
+    #                     validation_data=(X_test_scaled, y_test), verbose=1)
+    # model.fit(X_train_scaled, y_train, batch_size=batch_size, epochs=epochs, validation_data=(X_test_scaled, y_test))
+    #  # Train the model
+    # print("Loss function history during training:")
+    # print(history.history['loss']) 
+    history = model.fit(X_train_scaled, y_train, batch_size=batch_size, epochs=epochs, validation_data=(X_test_scaled, y_test))
+    
+    # Print final loss after training
+    final_loss = model.evaluate(X_test_scaled, y_test)
+    print(f"{TerminalColors.GREEN}Final Loss CNN (MSE): {final_loss}{TerminalColors.END}")
+    return model
+
 
 # train_linear_model() Function:
 # Train the linear regression model, then test based on trained model predictions.
@@ -229,24 +293,49 @@ def train_linear_model(X_train, X_test, y_train, y_test):
     return model, accuracy
 
 # Function to train a Random Forest model
-def train_random_forest_model(X_train, X_test, y_train, y_test):
-    model = RandomForestRegressor(n_estimators=100, random_state=42)
+n_estimators = 100
+max_depth = None  # Change this to a specific depth if needed
+
+def train_random_forest(X_train, X_test, y_train, y_test):
+    # Initialize Random Forest Regressor with predefined hyperparameters
+    model = RandomForestRegressor(
+        n_estimators=n_estimators,
+        max_depth=max_depth,
+        random_state=42
+    )
+    # Fit the model
     model.fit(X_train, y_train)
+    # Evaluate on test set and print the loss function (MSE)
     predictions = model.predict(X_test)
-    mse = mean_squared_error(y_test, predictions, squared=False)
-    accuracy = 1 - (mse / y_test.var())
-    return model, accuracy, predictions
+    mse = mean_squared_error(y_test, predictions)
+    print(f"{TerminalColors.GREEN}Final Loss RF (MSE): {mse}{TerminalColors.END}")
+    # Access the tree depths
+    tree_depths = [estimator.tree_.max_depth for estimator in model.estimators_]
+    print(f"Tree Depths RF: {tree_depths}")
+    return model
 
 
-# TODO increase number of estimators, add searly stopping, tree depths varyying/capping 
 # Function to train a Gradient Boosting model
-def train_gradient_boosting_model(X_train, X_test, y_train, y_test):
-    model = GradientBoostingRegressor(n_estimators=100, learning_rate=0.01, random_state=42)
+n_estimators = 100
+max_depth = 3
+learning_rate = 0.001
+def train_gradient_boosting(X_train, X_test, y_train, y_test):
+    # Initialize Gradient Boosting Regressor with predefined hyperparameters
+    model = GradientBoostingRegressor(
+        n_estimators=n_estimators,
+        max_depth=max_depth,
+        learning_rate=learning_rate,
+        random_state=42
+    )
+    
+    # Fit the model
     model.fit(X_train, y_train)
+    
+    # Evaluate on test set and print the loss function (MSE)
     predictions = model.predict(X_test)
-    mse = mean_squared_error(y_test, predictions, squared=False)
-    accuracy = 1 - (mse / y_test.var())
-    return model, accuracy, predictions
+    mse = mean_squared_error(y_test, predictions)
+    print(f"{TerminalColors.GREEN}Final Loss GB (MSE): {mse}{TerminalColors.END}")
+    return model
 
 
 def create_prediction_csv(X_test, y_test, predictions, prefix):
@@ -324,6 +413,7 @@ def visualize_correlation(merged_data):
     print(f"Percentage of $0 tips (After Removal): {zero_dollar_tips_percentage_after:.2f}%")
     print(f"Correlation coefficient (Pearson) between Rack Time and Tip (After Removal): {correlation_coefficient_after:.2f}")
     print(f"Number of data points (After Removal): {number_of_data_points_after}")
+
 
     plt.tight_layout()
     plt.show()
@@ -440,7 +530,7 @@ def main(visualize=True, save_artifacts=False):
     predictions = np.expm1(predictions_log)  # Inverse transformation from logarithmic scale
     mse = mean_squared_error(y_test, predictions)
     model = train_linear_regression(X_train, y_train)
-    print(f"Log Mean Squared Error: {mse}")
+    print(f"{TerminalColors.GREEN}Log Mean Squared Error: {mse}{TerminalColors.END}")
     threshold_value_log = np.median(predictions)  # Using median as the threshold value for logarithmic predictions
     print(f"Threshold Value based on Predicted Rack Time (using logarithmic regression): {threshold_value_log}")
 
@@ -451,26 +541,52 @@ def main(visualize=True, save_artifacts=False):
 
     # Calculate mean squared error
     mse = mean_squared_error(y_test, predictions)
-    print(f"Mean Squared Error: {mse}")
+    print(f"{TerminalColors.GREEN}RACK Time Mean Squared Error: {mse}{TerminalColors.END}")
 
     # Calculate threshold value based on the predicted rack time
     threshold_value = predictions.mean()  # Using mean as a simple threshold example
     print(f"Threshold Value based on Predicted Rack Time (using mean): {threshold_value}")
     threshold_value = np.median(predictions)  # Using median as the threshold value
     print(f"Threshold Value based on Predicted Rack Time (using median): {threshold_value}")
+    feature_weights = model.coef_
+    feature_names = X_train.columns  
+    feature_weights_df = pd.DataFrame({'Feature': feature_names, 'Weight': feature_weights})
+    print(feature_weights_df)
 
+    trained_model = train_cnn(X_train, X_test, y_train, y_test)
+    layers = trained_model.layers
+
+    # # Extracting weights of the layers
+    # for layer in layers:
+    #     if hasattr(layer, 'get_weights'):
+    #         weights = layer.get_weights()
+    #         if weights:
+    #             print(f"Weights for {layer.name}: {weights}")
 
     merged_data['predicted_rack_time'] = model.predict(merged_data[features_for_rack_time_prediction])
     merged_data.to_csv("test.csv", index=False)
     X_train_tip, X_test_tip, y_train_tip, y_test_tip = tip_data_loader(merged_data, threshold_value)
     
-    model = train_linear_regression(X_train_tip, y_train_tip)
+    gb_model = train_gradient_boosting(X_train, X_test, y_train, y_test)
+    rf_model = train_random_forest(X_train, X_test, y_train, y_test)
+
+    tip_model = train_linear_regression(X_train_tip, y_train_tip)
     # Predict on the test set
-    tip_predictions = model.predict(X_test_tip)
+    tip_predictions = tip_model.predict(X_test_tip)
+    tip_feature_weights = tip_model.coef_
+    tip_feature_names = X_train_tip.columns  # Assuming X_train is your training feature set
+    feature_weights_df = pd.DataFrame({'Feature': tip_feature_names, 'Weight': tip_feature_weights})
+    print(feature_weights_df)
 
     # Calculate MSE for tip predictions
     tip_mse = mean_squared_error(y_test_tip, tip_predictions)
     print(f"Mean Squared Error for Tip Prediction: {tip_mse}")
+    tip_trained_model = train_cnn( X_train_tip, X_test_tip, y_train_tip, y_test_tip)
+    tip_gb_model = train_gradient_boosting(X_train_tip, X_test_tip, y_train_tip, y_test_tip)
+    tip_rf_model = train_random_forest( X_train_tip, X_test_tip, y_train_tip, y_test_tip)
+
+
+
     # # Train the model, log relative accuracy with the given input data
     # model, accuracy = train_linear_model(X_train, X_test, y_train, y_test)
     
