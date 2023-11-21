@@ -580,7 +580,7 @@ def main(visualize=True, save_artifacts=False):
 
     # Calculate MSE for tip predictions
     tip_mse = mean_squared_error(y_test_tip, tip_predictions)
-    print(f"Mean Squared Error for Tip Prediction: {tip_mse}")
+    print(f"{TerminalColors.GREEN}Mean Squared Error for Tip Prediction: {tip_mse}{TerminalColors.END}")
     tip_trained_model = train_cnn( X_train_tip, X_test_tip, y_train_tip, y_test_tip)
     tip_gb_model = train_gradient_boosting(X_train_tip, X_test_tip, y_train_tip, y_test_tip)
     tip_rf_model = train_random_forest( X_train_tip, X_test_tip, y_train_tip, y_test_tip)
