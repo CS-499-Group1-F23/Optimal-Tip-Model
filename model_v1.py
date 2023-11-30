@@ -173,6 +173,8 @@ def train_linear_regression(X_train, y_train, X_test, y_test):
           coefficients)
     # Intercept (bias)
     intercept = model.intercept_
+    features = X_train.columns
+    print(f"Features (Linear Regression): {features}")
     print(f"Intercept (bias): {intercept} {TerminalColors.END}")
 
     return model, y_test_pred
@@ -209,11 +211,11 @@ def train_fnn(X_train, X_test, y_train, y_test):
     # Assuming X_train has column names, assign weights to features
     feature_weights = dict(zip(X_train.columns,input_layer_weights.T))  # Transpose to match features with weights
     print(f"{TerminalColors.BLUE}Feature Weights (FFNN): {feature_weights}{TerminalColors.END}")
-    print(f"{TerminalColors.BLUE} \nAverages\nTotal_amount = {np.average(feature_weights['total_amount_USD'])}, \
+    print(f"{TerminalColors.BLUE}Averages of weights\nTotal_amount = {np.average(feature_weights['total_amount_USD'])}, \
              \n Tip_USD = {np.average(feature_weights['Tip_USD'])} \
              \n Area_sqmi = {np.average(feature_weights['Area_sqmi'])} \
            {TerminalColors.END}")
-
+    print("\n")
     return model
 
 
