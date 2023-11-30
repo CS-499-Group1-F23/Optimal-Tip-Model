@@ -1,0 +1,73 @@
+** RACK_TIME
+Log Mean Squared Error: 106.7026335225796
+Log R-squared (R²) score for Linear Regression: -0.04618202690471351
+RACK Time Mean Squared Error: 96.56534230034002
+RACK Time R2 score for Linear Regression: 0.05321057033574472
+Threshold Value based on Predicted Rack Time (using mean): 10.5799092297144
+Threshold Value based on Predicted Rack Time (using median): 10.63250822199388
+Final Loss CNN (MSE): 94.06791687011719
+R-squared (R²) score for CNN: 0.07769716978413566
+Final Loss GB (MSE): 100.25447776772329
+R-squared (R²) score for Gradient Boosting Regressor: 0.017039886507436264
+Final Loss RF (MSE): 92.72309183342497
+R-squared (R²) score for Random Forest Regressor: 0.09088249321759334
+
+** TIP
+RACK Time R2 score for Linear Regression: 1.0
+Mean Squared Error for Tip Prediction: 1.1802806811053927e-23
+Final Loss CNN (MSE): 0.03666003420948982
+R-squared (R²) score for CNN: 0.987863995652937
+Final Loss GB (MSE): 2.6422860981533565
+R-squared (R²) score for Gradient Boosting Regressor: 0.12529281996100183
+Final Loss RF (MSE): 0.8283042276938927
+R-squared (R²) score for Random Forest Regressor: 0.7257966668609954
+
+
+** Weight RACK_TIME
+                             Feature    Weight
+0                          Area_sqmi  0.215528
+1                         Avg_income -0.000043
+2                            Tip_USD -0.828201
+3                   total_amount_USD  0.067052
+4                     Store_dma_id_y -0.081179
+5                 Store_dma_id_x_541  0.000381
+6                 Store_dma_id_x_754 -0.000381
+7            Store_postal_code_40503  0.213117
+8            Store_postal_code_40508 -0.007232
+9            Store_postal_code_40514 -0.205504
+10           Store_postal_code_59715 -0.000381
+11              Store_zip4_code_1545 -0.205504
+12              Store_zip4_code_3089 -0.007232
+13              Store_zip4_code_3167  0.213117
+14              Store_zip4_code_3310 -0.000381
+15                    Businesses_756 -0.205504
+16                   Businesses_1834  0.213117
+17                   Businesses_3269 -0.007232
+18                   Businesses_3725 -0.000381
+19    Store_locale_name_City - Large  0.000381
+20  Store_locale_name_Rural - Fringe -0.000381
+
+** Weight TIPS
+
+                             Feature    Weight
+0                   total_amount_USD  0.080961
+1                          Area_sqmi  0.260236
+2                         Avg_income -0.000052
+3                predicted_rack_time -1.207436
+4                     Store_dma_id_y -0.098018 **
+5                 Store_dma_id_x_541  0.000460
+6                 Store_dma_id_x_754 -0.000460
+7            Store_postal_code_40503  0.257326
+8            Store_postal_code_40508 -0.008733
+9            Store_postal_code_40514 -0.248133
+10           Store_postal_code_59715 -0.000460
+11              Store_zip4_code_1545 -0.248133
+12              Store_zip4_code_3089 -0.008733
+13              Store_zip4_code_3167  0.257326
+14              Store_zip4_code_3310 -0.000460
+15                    Businesses_756 -0.248133
+16                   Businesses_1834  0.257326
+17                   Businesses_3269 -0.008733
+18                   Businesses_3725 -0.000460
+19    Store_locale_name_City - Large  0.000460
+20  Store_locale_name_Rural - Fringe -0.000460
