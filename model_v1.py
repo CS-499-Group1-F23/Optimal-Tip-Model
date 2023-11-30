@@ -1,5 +1,6 @@
 # pip install pandas scikit-learn seaborn matplotlib
 import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Suppress TensorFlow info messages
 from datetime import datetime
 import pandas as pd
 import numpy as np
@@ -83,7 +84,7 @@ def preprocess_data(order_data, store_data, tip_percentage, percent_zero):
         else ('ZERO' if row['Tip_USD'] == 0 else 'FALSE'), axis=1)
 
     # List of columns to one-hot encode
-    columns_to_encode = ['store_number', 'Store_postal_code', 'Store_zip4_code',
+    columns_to_encode = ['Store_postal_code', 'Store_zip4_code',
                          'Businesses', 'Store_locale_name']
 
     # Perform one-hot encoding
@@ -118,13 +119,11 @@ def preprocess_data(order_data, store_data, tip_percentage, percent_zero):
 # TODO: find the test train ratio
 def data_loader(data):
     # Features for predicting rack time (starting with default columns)
-    features = ['total_amount_USD', 'Tip_USD', 'Store_dma_id']
+    features = ['total_amount_USD', 'Tip_USD', 'Area_sqmi']
     # Identify columns with specific prefixes and add them to the features list
-    for column in data.columns:
-        if column.startswith('Businesses') or column.startswith('Store_postal_code') \
-            or column.startswith('Store_zip4_code') or \
-                column.startswith('Store_locale_name') or column.startswith('store_number'):
-            features.append(column)
+    # for column in data.columns:
+    #     if column.startswith('Store_dma_id'):
+    #         features.append(column)
 
     # Select features and target variable (Rack_time)
     X = data[features]
@@ -141,6 +140,10 @@ def data_loader(data):
     for train_index, test_index in kf.split(X):
         X_train, X_test = X.iloc[train_index], X.iloc[test_index]
         y_train, y_test = y.iloc[train_index], y.iloc[test_index]
+    
+    print("Input data dimensions (samples, features):", X.shape) 
+    print("Train set dimensions (samples, features):", X_train.shape)
+    print("Test set dimensions (samples, features):", X_test.shape)
 
     return X_train, X_test, y_train, y_test, features
 
@@ -163,6 +166,43 @@ def train_linear_regression(X_train, y_train, X_test, y_test):
     print(f"{TerminalColors.GREEN}Test MSE: {test_mse}{TerminalColors.END}")
 
     return model, y_test_pred
+
+def train_fnn(X_train, X_test, y_train, y_test):
+    # Define FNN architecture
+    model = tf.keras.Sequential([
+        tf.keras.layers.Dense(64, activation='relu', input_shape=(X_train.shape[1],)),
+        tf.keras.layers.Dense(32, activation='relu'),
+        tf.keras.layers.Dense(1)  # Output layer with 1 neuron for 'Rack_time'
+    ])
+
+    # Compile the model
+    model.compile(optimizer='adam', loss='mean_squared_error')
+
+    # Train the model
+    model.fit(X_train, y_train, epochs=10, batch_size=32, verbose=0)
+
+    # Make predictions
+    y_pred = model.predict(X_test)
+
+    # Calculate and return MSE
+    mse = mean_squared_error(y_test, y_pred)
+    print(f"{TerminalColors.GREEN}Test MSE: {mse}{TerminalColors.END}")
+
+    layer_weights = []
+    for layer in model.layers:
+        weights = layer.get_weights()  # Get weights of each layer
+        layer_weights.append(weights)
+
+    # Assuming the first layer is the input layer, get its weights
+    input_layer_weights = np.average(layer_weights[0][0])  
+    # Assuming X_train has column names, assign weights to features
+    feature_weights = dict(zip(X_train.columns, input_layer_weights.T))  # Transpose to match features with weights
+    print(f"{TerminalColors.RED}Feature Weights: {feature_weights}{TerminalColors.END}")
+
+    input_layer_weights = np.mean(layer_weights[0][0]) 
+    feature_weights = dict(zip(X_train.columns, input_layer_weights.T))  
+    print(f"{TerminalColors.RED}Feature Weights: {feature_weights}{TerminalColors.END}")
+    return model
 
 
 def create_prediction_csv(X_test, y_test, predictions, prefix):
@@ -363,7 +403,7 @@ def main(visualize=True, save_artifacts=False):
     merged_data = preprocess_data(
         order_data, store_data, tip_percentage=good_tip_definition, percent_zero=percent_zero)
     X_train, X_test, y_train, y_test, features = data_loader(merged_data)
-    visualize_tip_distribution(merged_data)
+    train_fnn(X_train, X_test, y_train, y_test)
     lr_model, lr_predictions = train_linear_regression(
         X_train, y_train, X_test, y_test)
 
