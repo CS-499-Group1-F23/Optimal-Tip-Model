@@ -1223,3 +1223,47 @@
 
 2023-11-30 13:54:41,685 - WARNING - From C:\Users\jhuse\OneDrive - University of Kentucky\2023-2024\Y4S1\CS 499\CS499 Group\Jackson\Codespace\venv\lib\site-packages\keras\src\utils\tf_utils.py:492: The name tf.ragged.RaggedTensorValue is deprecated. Please use tf.compat.v1.ragged.RaggedTensorValue instead.
 
+2023-11-30 14:09:24,344 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 14:09:24,345 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 14:09:24,345 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 14:09:24,345 - INFO - data size 2468608
+2023-11-30 14:13:16,765 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 14:13:16,765 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 14:13:16,765 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 14:13:16,766 - INFO - data size 2468608
+2023-11-30 14:13:16,782 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 14:13:16,783 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 14:13:16,783 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 14:13:16,783 - INFO - data size 2468608
+2023-11-30 14:23:01,181 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 14:23:01,182 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 14:23:01,182 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 14:23:01,182 - INFO - data size 2468608
+2023-11-30 14:28:32,050 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 14:28:32,050 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 14:28:32,050 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 14:28:32,050 - INFO - data size 2468608
+2023-11-30 14:32:32,418 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 14:32:32,418 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 14:32:32,418 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 14:32:32,418 - INFO - data size 2468608
+2023-11-30 14:38:49,230 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 14:38:49,230 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 14:38:49,230 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 14:38:49,230 - INFO - data size 2468608
+2023-11-30 14:48:17,111 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 14:48:17,111 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 14:48:17,111 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 14:48:17,111 - INFO - data size 2468608
+2023-11-30 15:02:31,733 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 15:02:31,734 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 15:02:31,734 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 15:02:31,735 - INFO - data size 2468608
+2023-11-30 15:03:57,953 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 15:03:57,953 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 15:03:57,953 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 15:03:57,953 - INFO - data size 2468608
+2023-11-30 15:05:05,214 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 15:05:05,215 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 15:05:05,215 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 15:05:05,215 - INFO - data size 2468608
