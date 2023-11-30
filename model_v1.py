@@ -1,4 +1,4 @@
-# pip install pandas scikit-learn seaborn matplotlib
+# pip install pandas scikit-learn seaborn matplotlib tensorflow statsmodels numpy
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Suppress TensorFlow info messages
 from datetime import datetime
@@ -186,7 +186,7 @@ def train_fnn(X_train, X_test, y_train, y_test):
 
     # Calculate and return MSE
     mse = mean_squared_error(y_test, y_pred)
-    print(f"{TerminalColors.GREEN}Test MSE: {mse}{TerminalColors.END}")
+    print(f"{TerminalColors.RED}Test MSE: {mse}{TerminalColors.END}")
 
     layer_weights = []
     for layer in model.layers:
@@ -194,14 +194,11 @@ def train_fnn(X_train, X_test, y_train, y_test):
         layer_weights.append(weights)
 
     # Assuming the first layer is the input layer, get its weights
-    input_layer_weights = np.average(layer_weights[0][0])  
+    input_layer_weights = layer_weights[0][0]
     # Assuming X_train has column names, assign weights to features
     feature_weights = dict(zip(X_train.columns, input_layer_weights.T))  # Transpose to match features with weights
-    print(f"{TerminalColors.RED}Feature Weights: {feature_weights}{TerminalColors.END}")
+    print(f"{TerminalColors.RED}Feature Weights (FFNN): {feature_weights}{TerminalColors.END}")
 
-    input_layer_weights = np.mean(layer_weights[0][0]) 
-    feature_weights = dict(zip(X_train.columns, input_layer_weights.T))  
-    print(f"{TerminalColors.RED}Feature Weights: {feature_weights}{TerminalColors.END}")
     return model
 
 
@@ -409,7 +406,7 @@ def main(visualize=True, save_artifacts=False):
 
     # Coefficients/Weights (w1, w2, w3)
     coefficients = lr_model.coef_
-    print(f"{TerminalColors.GREEN}Coefficients/Weights:",
+    print(f"{TerminalColors.GREEN}Coefficients/Weights (Linear Regression):",
           coefficients, f"{TerminalColors.END}")
     data = {'Feature Name': features, 'Coefficient Value': coefficients}
     df = pd.DataFrame(data)

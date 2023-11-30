@@ -1203,3 +1203,23 @@
 2023-11-30 12:51:03,609 - INFO - Percentage of bad tip data: 14.25%
 2023-11-30 12:51:03,609 - INFO - Percentage of zero tip data: 30.56%
 2023-11-30 12:51:03,609 - INFO - data size 2468608
+2023-11-30 12:58:25,506 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 12:58:25,507 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 12:58:25,507 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 12:58:25,507 - INFO - data size 2468608
+2023-11-30 12:58:27,407 - WARNING - From C:\Users\jhuse\OneDrive - University of Kentucky\2023-2024\Y4S1\CS 499\CS499 Group\Jackson\Codespace\venv\lib\site-packages\keras\src\backend.py:873: The name tf.get_default_graph is deprecated. Please use tf.compat.v1.get_default_graph instead.
+
+2023-11-30 12:58:27,640 - WARNING - From C:\Users\jhuse\OneDrive - University of Kentucky\2023-2024\Y4S1\CS 499\CS499 Group\Jackson\Codespace\venv\lib\site-packages\keras\src\optimizers\__init__.py:309: The name tf.train.Optimizer is deprecated. Please use tf.compat.v1.train.Optimizer instead.
+
+2023-11-30 12:58:28,313 - WARNING - From C:\Users\jhuse\OneDrive - University of Kentucky\2023-2024\Y4S1\CS 499\CS499 Group\Jackson\Codespace\venv\lib\site-packages\keras\src\utils\tf_utils.py:492: The name tf.ragged.RaggedTensorValue is deprecated. Please use tf.compat.v1.ragged.RaggedTensorValue instead.
+
+2023-11-30 13:54:36,971 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 13:54:36,978 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 13:54:36,979 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 13:54:36,980 - INFO - data size 2468608
+2023-11-30 13:54:39,837 - WARNING - From C:\Users\jhuse\OneDrive - University of Kentucky\2023-2024\Y4S1\CS 499\CS499 Group\Jackson\Codespace\venv\lib\site-packages\keras\src\backend.py:873: The name tf.get_default_graph is deprecated. Please use tf.compat.v1.get_default_graph instead.
+
+2023-11-30 13:54:40,552 - WARNING - From C:\Users\jhuse\OneDrive - University of Kentucky\2023-2024\Y4S1\CS 499\CS499 Group\Jackson\Codespace\venv\lib\site-packages\keras\src\optimizers\__init__.py:309: The name tf.train.Optimizer is deprecated. Please use tf.compat.v1.train.Optimizer instead.
+
+2023-11-30 13:54:41,685 - WARNING - From C:\Users\jhuse\OneDrive - University of Kentucky\2023-2024\Y4S1\CS 499\CS499 Group\Jackson\Codespace\venv\lib\site-packages\keras\src\utils\tf_utils.py:492: The name tf.ragged.RaggedTensorValue is deprecated. Please use tf.compat.v1.ragged.RaggedTensorValue instead.
+
