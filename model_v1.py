@@ -25,9 +25,13 @@ class TerminalColors:
     GREEN = '\033[92m'
     YELLOW = '\033[93m'
     BLUE = '\033[94m'
+    BOLD = '\033[1m'
     END = '\033[0m'
 
-
+    @classmethod
+    def bold_text(cls, text):
+        return cls.BOLD + text + cls.END
+    
 # Set up logging configuration
 logging.basicConfig(filename='Data/log.txt', level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
@@ -49,6 +53,7 @@ def load_data(order_source, store_source):
 # (i.e., 12% or more is a good tip, 0-12% is bad, etc.)
 # Output: Processed (merged) dataset
 def preprocess_data(order_data, store_data, tip_percentage, percent_zero):
+    print(f"{TerminalColors.YELLOW + TerminalColors.BOLD}Preprocessing data...{TerminalColors.END}")
     # Remove non-delivery orders
     order_data = order_data[order_data['Destination_type'] == 'Delivery']
 
@@ -98,10 +103,10 @@ def preprocess_data(order_data, store_data, tip_percentage, percent_zero):
         merged_data[merged_data['good_tip'] == 'FALSE']) / total_rows * 100
     zero_tip_percentage = len(
         merged_data[merged_data['good_tip'] == 'ZERO']) / total_rows * 100
-    print(f"Percentage of good tip data: {good_tip_percentage:.2f}%")
+    print(f"{TerminalColors.YELLOW}Percentage of good tip data: {good_tip_percentage:.2f}%")
     print(f"Percentage of bad tip data: {bad_tip_percentage:.2f}%")
     print(f"Percentage of zero tip data: {zero_tip_percentage:.2f}%")
-    print("data size", merged_data.size)
+    print(f"{TerminalColors.END}\n")
     logging.info(f"Percentage of good tip data: {good_tip_percentage:.2f}%")
     logging.info(f"Percentage of bad tip data: {bad_tip_percentage:.2f}%")
     logging.info(f"Percentage of zero tip data: {zero_tip_percentage:.2f}%")
@@ -118,6 +123,7 @@ def preprocess_data(order_data, store_data, tip_percentage, percent_zero):
 
 # TODO: find the test train ratio
 def data_loader(data):
+    print(f"{TerminalColors.RED + TerminalColors.BOLD}Loading data...{TerminalColors.END}")
     # Features for predicting rack time (starting with default columns)
     features = ['total_amount_USD', 'Tip_USD', 'Area_sqmi']
     # Identify columns with specific prefixes and add them to the features list
@@ -129,7 +135,7 @@ def data_loader(data):
     X = data[features]
     y = data['Rack_time']
 
-    print("Input data dimensions (samples, features):",
+    print(f"{TerminalColors.RED}Input data dimensions (samples, features):",
           X.shape)  # Print input data dimensions
 
     n_splits = 10  # number of folds
@@ -141,10 +147,10 @@ def data_loader(data):
         X_train, X_test = X.iloc[train_index], X.iloc[test_index]
         y_train, y_test = y.iloc[train_index], y.iloc[test_index]
     
-    print("Input data dimensions (samples, features):", X.shape) 
+    print(f"{TerminalColors.RED}Input data dimensions (samples, features):", X.shape) 
     print("Train set dimensions (samples, features):", X_train.shape)
     print("Test set dimensions (samples, features):", X_test.shape)
-
+    print(f"{TerminalColors.END}\n")
     return X_train, X_test, y_train, y_test, features
 
 
@@ -154,20 +160,27 @@ def data_loader(data):
 # Input: Data instances for the inputs and outputs of the model testing variables
 # Output: The (now trained and testd) model and it's accuracy
 def train_linear_regression(X_train, y_train, X_test, y_test):
-    # TODO: add bias?
-    # Initialize and train the linear regression model
+    print(f"{TerminalColors.GREEN + TerminalColors.BOLD}Training linear regression Training{TerminalColors.END}")
     model = LinearRegression()
     model.fit(X_train, y_train)
     y_train_pred = model.predict(X_train)
     y_test_pred = model.predict(X_test)
-    train_mse = mean_squared_error(y_train, y_train_pred)
     test_mse = mean_squared_error(y_test, y_test_pred)
-    print(f"{TerminalColors.GREEN}Train MSE: {train_mse}{TerminalColors.END}")
-    print(f"{TerminalColors.GREEN}Test MSE: {test_mse}{TerminalColors.END}")
+    print(f"{TerminalColors.GREEN}LinearRegression MSE: {test_mse}")
+        # Coefficients/Weights (w1, w2, w3)
+    coefficients = model.coef_
+    print(f"{TerminalColors.GREEN}Coefficients/Weights (Linear Regression):",
+          coefficients)
+    # Intercept (bias)
+    intercept = model.intercept_
+    features = X_train.columns
+    print(f"Features (Linear Regression): {features}")
+    print(f"Intercept (bias): {intercept} {TerminalColors.END}")
 
     return model, y_test_pred
 
 def train_fnn(X_train, X_test, y_train, y_test):
+    print(f"{TerminalColors.BLUE + TerminalColors.BOLD}Training ForwardFeed NN{TerminalColors.END}")
     # Define FNN architecture
     model = tf.keras.Sequential([
         tf.keras.layers.Dense(64, activation='relu', input_shape=(X_train.shape[1],)),
@@ -186,7 +199,7 @@ def train_fnn(X_train, X_test, y_train, y_test):
 
     # Calculate and return MSE
     mse = mean_squared_error(y_test, y_pred)
-    print(f"{TerminalColors.RED}Test MSE: {mse}{TerminalColors.END}")
+    print(f"{TerminalColors.BLUE} ForwardFeed NN Test MSE: {mse}{TerminalColors.END}")
 
     layer_weights = []
     for layer in model.layers:
@@ -196,9 +209,13 @@ def train_fnn(X_train, X_test, y_train, y_test):
     # Assuming the first layer is the input layer, get its weights
     input_layer_weights = layer_weights[0][0]
     # Assuming X_train has column names, assign weights to features
-    feature_weights = dict(zip(X_train.columns, input_layer_weights.T))  # Transpose to match features with weights
-    print(f"{TerminalColors.RED}Feature Weights (FFNN): {feature_weights}{TerminalColors.END}")
-
+    feature_weights = dict(zip(X_train.columns,input_layer_weights.T))  # Transpose to match features with weights
+    print(f"{TerminalColors.BLUE}Feature Weights (FFNN): {feature_weights}{TerminalColors.END}")
+    print(f"{TerminalColors.BLUE}Averages of weights\nTotal_amount = {np.average(feature_weights['total_amount_USD'])}, \
+             \n Tip_USD = {np.average(feature_weights['Tip_USD'])} \
+             \n Area_sqmi = {np.average(feature_weights['Area_sqmi'])} \
+           {TerminalColors.END}")
+    print("\n")
     return model
 
 
@@ -401,21 +418,7 @@ def main(visualize=True, save_artifacts=False):
         order_data, store_data, tip_percentage=good_tip_definition, percent_zero=percent_zero)
     X_train, X_test, y_train, y_test, features = data_loader(merged_data)
     train_fnn(X_train, X_test, y_train, y_test)
-    lr_model, lr_predictions = train_linear_regression(
-        X_train, y_train, X_test, y_test)
-
-    # Coefficients/Weights (w1, w2, w3)
-    coefficients = lr_model.coef_
-    print(f"{TerminalColors.GREEN}Coefficients/Weights (Linear Regression):",
-          coefficients, f"{TerminalColors.END}")
-    data = {'Feature Name': features, 'Coefficient Value': coefficients}
-    df = pd.DataFrame(data)
-
-    # Export to an Excel file
-    df.to_csv('features_coefficients.csv', index=False)
-    # Intercept (bias)
-    intercept = lr_model.intercept_
-    print("Intercept (bias):", intercept)
+    lr_model, lr_predictions = train_linear_regression(X_train, y_train, X_test, y_test)
 
     threshold_predicted_rack_time = 7.0
 
