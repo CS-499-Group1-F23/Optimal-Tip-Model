@@ -1,5 +1,6 @@
 # pip install pandas scikit-learn seaborn matplotlib
 import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Suppress TensorFlow info messages
 from datetime import datetime
 import pandas as pd
 import numpy as np
@@ -120,9 +121,9 @@ def data_loader(data):
     # Features for predicting rack time (starting with default columns)
     features = ['total_amount_USD', 'Tip_USD', 'Area_sqmi']
     # Identify columns with specific prefixes and add them to the features list
-    for column in data.columns:
-        if column.startswith('Store_dma_id'):
-            features.append(column)
+    # for column in data.columns:
+    #     if column.startswith('Store_dma_id'):
+    #         features.append(column)
 
     # Select features and target variable (Rack_time)
     X = data[features]
@@ -193,11 +194,14 @@ def train_fnn(X_train, X_test, y_train, y_test):
         layer_weights.append(weights)
 
     # Assuming the first layer is the input layer, get its weights
-    input_layer_weights = layer_weights[0][0]  # Assuming weights are at index 0
-
+    input_layer_weights = np.average(layer_weights[0][0])  
     # Assuming X_train has column names, assign weights to features
     feature_weights = dict(zip(X_train.columns, input_layer_weights.T))  # Transpose to match features with weights
-    print(f"{TerminalColors.GREEN}Feature Weights: {feature_weights}{TerminalColors.END}")
+    print(f"{TerminalColors.RED}Feature Weights: {feature_weights}{TerminalColors.END}")
+
+    input_layer_weights = np.mean(layer_weights[0][0]) 
+    feature_weights = dict(zip(X_train.columns, input_layer_weights.T))  
+    print(f"{TerminalColors.RED}Feature Weights: {feature_weights}{TerminalColors.END}")
     return model
 
 
