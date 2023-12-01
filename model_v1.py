@@ -9,6 +9,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
 import seaborn as sns
+import joblib
 import statsmodels.api as sm
 import logging
 import matplotlib.pyplot as plt
@@ -121,7 +122,6 @@ def preprocess_data(order_data, store_data, tip_percentage, percent_zero):
     return merged_data
 
 
-# TODO: find the test train ratio
 def data_loader(data):
     print(f"{TerminalColors.RED + TerminalColors.BOLD}Loading data...{TerminalColors.END}")
     # Features for predicting rack time (starting with default columns)
@@ -166,17 +166,18 @@ def train_linear_regression(X_train, y_train, X_test, y_test):
     y_train_pred = model.predict(X_train)
     y_test_pred = model.predict(X_test)
     test_mse = mean_squared_error(y_test, y_test_pred)
-    print(f"{TerminalColors.GREEN}LinearRegression MSE: {test_mse}")
         # Coefficients/Weights (w1, w2, w3)
     coefficients = model.coef_
+    features = X_train.columns.tolist()
+    print(f"{TerminalColors.GREEN}Features (Linear Regression): {features}")
     print(f"{TerminalColors.GREEN}Coefficients/Weights (Linear Regression):",
           coefficients)
     # Intercept (bias)
     intercept = model.intercept_
-    features = X_train.columns
-    print(f"Features (Linear Regression): {features}")
     print(f"Intercept (bias): {intercept} {TerminalColors.END}")
-
+    joblib.dump(model, 'lr_model_2023-11-30.pkl')  # Save the entire model
+    print(f"{TerminalColors.GREEN + TerminalColors.BOLD}LinearRegression MSE: {test_mse}")
+    print("\n")
     return model, y_test_pred
 
 def train_fnn(X_train, X_test, y_train, y_test):
@@ -210,11 +211,12 @@ def train_fnn(X_train, X_test, y_train, y_test):
     input_layer_weights = layer_weights[0][0]
     # Assuming X_train has column names, assign weights to features
     feature_weights = dict(zip(X_train.columns,input_layer_weights.T))  # Transpose to match features with weights
-    print(f"{TerminalColors.BLUE}Feature Weights (FFNN): {feature_weights}{TerminalColors.END}")
+    # print(f"{TerminalColors.BLUE}Feature Weights (FFNN): {feature_weights}{TerminalColors.END}")
     print(f"{TerminalColors.BLUE}Averages of weights\nTotal_amount = {np.average(feature_weights['total_amount_USD'])}, \
              \n Tip_USD = {np.average(feature_weights['Tip_USD'])} \
              \n Area_sqmi = {np.average(feature_weights['Area_sqmi'])} \
            {TerminalColors.END}")
+    print(f"{TerminalColors.BLUE + TerminalColors.BOLD} ForwardFeed NN Test MSE: {mse}{TerminalColors.END}")
     print("\n")
     return model
 
@@ -248,7 +250,7 @@ def visualize_correlation(merged_data):
     plt.figure(figsize=(10, 6))
     plt.subplot(2, 2, 1)
     sns.scatterplot(y='Rack_time', x='Tip_USD', data=merged_data)
-    plt.ylabel('Rack Time (minutes)')
+    plt.ylabel('Rack Time (secounds)')
     plt.xlabel('Tip (USD)')
     plt.title('Rack Time vs. Tip With Statistical Outliers')
     plt.ylim(1, 50)
@@ -281,7 +283,7 @@ def visualize_correlation(merged_data):
     # scatterplot after removing zero-dollar tips and outliers
     plt.subplot(2, 2, 3)
     sns.scatterplot(y='Rack_time', x='Tip_USD', data=merged_data)
-    plt.ylabel('Rack Time (minutes)')
+    plt.ylabel('Rack Time (secounds)')
     plt.xlabel('Tip (USD)')
     plt.title('Rack Time vs. Tip Without Statistical Outliers')
     plt.ylim(1, 50)
@@ -348,7 +350,7 @@ def visualize_tip_distribution(merged_data):
     plt.figure(figsize=(10, 6))
     plt.bar(tip_range_labels, rack_time_values)
     plt.xlabel('Tip Range (USD)')
-    plt.ylabel('Rack Time (minutes)')
+    plt.ylabel('Rack Time (Seconds)')
     plt.title('Rack Time Distribution in Different Tip Ranges')
     plt.xticks(rotation=45)
     plt.show()
@@ -359,7 +361,7 @@ def visualize_tip_distribution(merged_data):
 # This is a method of checking accuracy and determining optimal tip vs. actual tip
 # Input: Linear regression model test data, and the predicted data
 # Output: Generated data visualization
-def visualize_predictions(X_test, y_test, predictions, accuracy, good_tip, percent_good, percent_bad, percent_zero):
+def visualize_predictions(X_test, y_test, predictions):
     plt.figure(figsize=(10, 6))
     plt.scatter(X_test['total_amount_USD'], y_test,
                 color='blue', label='Actual')
@@ -367,14 +369,8 @@ def visualize_predictions(X_test, y_test, predictions, accuracy, good_tip, perce
                 color='red', label='Optimal')
     plt.xlabel('Total Amount (USD)')
     plt.ylabel('Tip (USD)')
-    plt.title(
-        f'Actual vs. Predicted Tips {percent_good * 100}:{percent_bad * 100}:{percent_zero * 100} (Good:Bad:Zero)')
+    plt.title('Actual vs. Predicted Tips')
     plt.legend()
-
-    # Add important background information to the plot
-    plot_annotation = f'*Good tip considered to be {good_tip * 100}% or higher.\nAccuracy: {(accuracy*100):.2f}%'
-    plt.text(1, -0.1, plot_annotation, fontsize=9, ha='right',
-             va='center', transform=plt.gca().transAxes)
 
     # Add the equation of the predicted line
     coefs = np.polyfit(X_test['total_amount_USD'], predictions, 1)
@@ -383,6 +379,30 @@ def visualize_predictions(X_test, y_test, predictions, accuracy, good_tip, perce
              va='center', transform=plt.gca().transAxes)
 
     plt.show()
+
+def get_rack_time(model, test_input, threshold_racktime):
+    # save test_input to csv
+    test_input.to_csv('test_input.csv', index=False)
+
+    # Calculate predicted rack times for the test set
+    predicted_rack_times = model.predict(test_input)
+    # Find the threshold rack time using the median of predicted rack times
+    threshold_rack_time = np.median(predicted_rack_times)
+
+    # Extract feature weights and intercept from the trained model
+    feature_weights = model.coef_
+    intercept = model.intercept_
+
+    # Reverse engineer the model to predict Tip_USD for the test data based on weights and threshold
+    optimal_tips = []
+    for index, row in test_input.iterrows():
+    
+        # Calculate the predicted Tip_USD using the weights and threshold rack time
+        predicted_tip = (threshold_rack_time - (feature_weights[0]* row['total_amount_USD']) - (row['Area_sqmi']*feature_weights[2]) - intercept) / (feature_weights[1])
+        # round the predicted tip to the nearest cent
+        predicted_tip = round(predicted_tip, 2)
+        optimal_tips.append(predicted_tip)
+    return optimal_tips
 
 
 # main() Function:
@@ -417,10 +437,11 @@ def main(visualize=True, save_artifacts=False):
     merged_data = preprocess_data(
         order_data, store_data, tip_percentage=good_tip_definition, percent_zero=percent_zero)
     X_train, X_test, y_train, y_test, features = data_loader(merged_data)
-    train_fnn(X_train, X_test, y_train, y_test)
     lr_model, lr_predictions = train_linear_regression(X_train, y_train, X_test, y_test)
+    train_fnn(X_train, X_test, y_train, y_test)
 
-    threshold_predicted_rack_time = 7.0
+    get_rack_time(lr_model, X_test, threshold_racktime=7.0)
+    
 
     if save_artifacts:
         current_datetime = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')

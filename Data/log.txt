@@ -1271,3 +1271,99 @@
 2023-11-30 15:11:56,585 - INFO - Percentage of bad tip data: 14.25%
 2023-11-30 15:11:56,585 - INFO - Percentage of zero tip data: 30.56%
 2023-11-30 15:11:56,585 - INFO - data size 2468608
+2023-11-30 16:55:07,211 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 16:55:07,211 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 16:55:07,211 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 16:55:07,211 - INFO - data size 2468608
+2023-11-30 17:06:52,624 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 17:06:52,624 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 17:06:52,624 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 17:06:52,624 - INFO - data size 2468608
+2023-11-30 17:29:26,513 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 17:29:26,513 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 17:29:26,513 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 17:29:26,513 - INFO - data size 2468608
+2023-11-30 17:30:00,409 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 17:30:00,409 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 17:30:00,409 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 17:30:00,409 - INFO - data size 2468608
+2023-11-30 18:19:35,490 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 18:19:35,491 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 18:19:35,491 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 18:19:35,491 - INFO - data size 2468608
+2023-11-30 18:22:00,996 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 18:22:00,997 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 18:22:00,997 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 18:22:00,997 - INFO - data size 2468608
+2023-11-30 18:30:20,952 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 18:30:20,953 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 18:30:20,953 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 18:30:20,953 - INFO - data size 2468608
+2023-11-30 18:32:47,772 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 18:32:47,773 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 18:32:47,773 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 18:32:47,773 - INFO - data size 2468608
+2023-11-30 18:58:32,371 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 18:58:32,371 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 18:58:32,371 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 18:58:32,371 - INFO - data size 2468608
+2023-11-30 18:59:23,425 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 18:59:23,426 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 18:59:23,426 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 18:59:23,426 - INFO - data size 2468608
+2023-11-30 19:00:42,689 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 19:00:42,689 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 19:00:42,689 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 19:00:42,689 - INFO - data size 2468608
+2023-11-30 19:03:07,465 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 19:03:07,466 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 19:03:07,466 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 19:03:07,466 - INFO - data size 2468608
+2023-11-30 19:03:21,458 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 19:03:21,458 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 19:03:21,458 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 19:03:21,458 - INFO - data size 2468608
+2023-11-30 19:03:40,395 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 19:03:40,395 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 19:03:40,395 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 19:03:40,395 - INFO - data size 2468608
+2023-11-30 19:07:56,778 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 19:07:56,779 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 19:07:56,779 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 19:07:56,779 - INFO - data size 2468608
+2023-11-30 19:08:21,070 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 19:08:21,070 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 19:08:21,070 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 19:08:21,070 - INFO - data size 2468608
+2023-11-30 19:22:44,056 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 19:22:44,056 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 19:22:44,056 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 19:22:44,056 - INFO - data size 2468608
+2023-11-30 19:36:30,768 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 19:36:30,769 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 19:36:30,769 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 19:36:30,769 - INFO - data size 2468608
+2023-11-30 19:37:11,863 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 19:37:11,863 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 19:37:11,863 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 19:37:11,863 - INFO - data size 2468608
+2023-11-30 19:37:53,496 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 19:37:53,496 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 19:37:53,496 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 19:37:53,496 - INFO - data size 2468608
+2023-11-30 19:38:36,019 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 19:38:36,019 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 19:38:36,019 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 19:38:36,019 - INFO - data size 2468608
+2023-11-30 19:39:27,718 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 19:39:27,718 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 19:39:27,718 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 19:39:27,718 - INFO - data size 2468608
+2023-11-30 19:43:51,051 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 19:43:51,051 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 19:43:51,053 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 19:43:51,053 - INFO - data size 2468608
+2023-11-30 19:44:50,666 - INFO - Percentage of good tip data: 55.19%
+2023-11-30 19:44:50,666 - INFO - Percentage of bad tip data: 14.25%
+2023-11-30 19:44:50,666 - INFO - Percentage of zero tip data: 30.56%
+2023-11-30 19:44:50,666 - INFO - data size 2468608
