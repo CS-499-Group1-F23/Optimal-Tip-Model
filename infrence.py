@@ -1,11 +1,8 @@
 import joblib
-import numpy as np
 import pandas as pd
-
 
 def get_tip(model, test_input):
     # Calculate predicted rack times for the test set
-    predicted_rack_times = model.predict(test_input)
     # Find the threshold rack time using the median of predicted rack times
     threshold_rack_time = 10
 
@@ -18,11 +15,11 @@ def get_tip(model, test_input):
     return  round(predicted_optimal_tips, 2)
 
 def main():
-    # load model
+    # Load model
     model = joblib.load('lr_model_2023-11-30.pkl')
 
     for i in range(0, 3):
-        # define test input
+        # Define test input
         test_input = float(input("Enter total amount: "))
         test_input_data = {
             'total_amount_USD': [test_input],
@@ -32,11 +29,10 @@ def main():
 
         test_input = pd.DataFrame(test_input_data)
 
-        # get suggested tip and print result for test inputs
+        # Get suggested tip and print result for test inputs
         suggested_tip = get_tip(model, test_input)
         print(f"Optimal tip: ${suggested_tip}")
     
 
-# run main
 if __name__ == "__main__":
     main()
