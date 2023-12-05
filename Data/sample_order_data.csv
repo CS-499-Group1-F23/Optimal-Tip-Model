@@ -1,0 +1,2 @@
+Store_dma_id,Rack_time,To_the_door_time,Otd_time,Source_actor,Destination_type,Destination_Channel,subtotal_amount_USD,total_tax_USD,net_sales_USD,store_order_number,store_number,Tip_USD
+123,1.234,12.234,12.23,OS,Delivery,Dispatch,12.34,1.23,1.23,01|20221004|0123,01,1.0

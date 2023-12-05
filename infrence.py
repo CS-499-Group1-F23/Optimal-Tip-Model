@@ -16,7 +16,8 @@ def get_tip(model, test_input):
 
 def main():
     # Load model
-    model = joblib.load('lr_model_2023-11-30.pkl')
+    model_file = ''
+    model = joblib.load(model_file)
 
     for i in range(0, 3):
         # Define test input

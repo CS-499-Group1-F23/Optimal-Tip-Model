@@ -175,7 +175,6 @@ def train_linear_regression(X_train, y_train, X_test, y_test):
     # Intercept (bias)
     intercept = model.intercept_
     print(f"Intercept (bias): {intercept} {TerminalColors.END}")
-    joblib.dump(model, 'lr_model_2023-11-30.pkl')  # Save the entire model
     print(f"{TerminalColors.GREEN + TerminalColors.BOLD}LinearRegression MSE: {test_mse}")
     print("\n")
     return model, y_test_pred
@@ -467,15 +466,15 @@ Main
 
 Parameters:
 visualize (bool): If True, visualizes data distributions and correlations.
-save_artifacts (bool): If True, saves processed data to CSV files.
+save_artifacts (bool): If True, saves processed data to CSV files and model infrence.
 
 Output:
 Executes the data processing and modeling pipeline. Optionally saves data and displays visualizations.
 """
-def main(visualize=True, save_artifacts=False):
+def main(visualize=False, save_artifacts=False):
     # Define Order and Store data CSV file locations
-    order_source = 'Data/dispatch_order_data.csv'
-    store_source = 'Data/dispatch_store_data.csv'
+    order_source = ""
+    store_source = ""
 
     # Define the distribution of good tips to bad tips to zero dollar tips for the model training
     percent_good = 0.6
@@ -509,6 +508,7 @@ def main(visualize=True, save_artifacts=False):
         file_name = f'merged_data_{current_datetime}.csv'
         merged_data.to_csv(file_name, index=False)
         print(f"Merged data saved as '{file_name}'.")
+        joblib.dump(lr_model, f'lr_model_{current_datetime}.pkl')  # Save the entire model
 
     # Show visualization for raw data and model predictions through matplotlib graphs
     if visualize:
