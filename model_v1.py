@@ -1,26 +1,20 @@
-# pip install pandas scikit-learn seaborn matplotlib tensorflow statsmodels numpy
+# pip install datetime logging pandas joblib scikit-learn seaborn matplotlib tensorflow statsmodels numpy
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Suppress TensorFlow info messages
 from datetime import datetime
 import pandas as pd
 import numpy as np
 import tensorflow as tf
-from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
 import seaborn as sns
 import joblib
-import statsmodels.api as sm
 import logging
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-import math
 from sklearn.model_selection import KFold
 
-
 mpl.use('TkAgg')
-
-
 class TerminalColors:
     RED = '\033[91m'
     GREEN = '\033[92m'
@@ -121,7 +115,6 @@ def preprocess_data(order_data, store_data, tip_percentage, percent_zero):
 
     return merged_data
 
-
 def data_loader(data):
     print(f"{TerminalColors.RED + TerminalColors.BOLD}Loading data...{TerminalColors.END}")
     # Features for predicting rack time (starting with default columns)
@@ -154,11 +147,19 @@ def data_loader(data):
     return X_train, X_test, y_train, y_test, features
 
 
-# train_linear_model() Function:
-# Train the linear regression model, then test based on trained model predictions.
-# Accuracy is calculated in this function.
-# Input: Data instances for the inputs and outputs of the model testing variables
-# Output: The (now trained and testd) model and it's accuracy
+"""
+Trains and evaluates a linear regression model.
+
+Trains the model with X_train and y_train, then predicts and calculates MSE on X_test and y_test. 
+Model's coefficients, intercept, and MSE are printed. The model is saved to a file.
+
+Parameters:
+X_train, y_train: Training data.
+X_test, y_test: Testing data.
+
+Returns:
+Trained model and its predictions on test data.
+"""
 def train_linear_regression(X_train, y_train, X_test, y_test):
     print(f"{TerminalColors.GREEN + TerminalColors.BOLD}Training linear regression Training{TerminalColors.END}")
     model = LinearRegression()
@@ -166,7 +167,6 @@ def train_linear_regression(X_train, y_train, X_test, y_test):
     y_train_pred = model.predict(X_train)
     y_test_pred = model.predict(X_test)
     test_mse = mean_squared_error(y_test, y_test_pred)
-        # Coefficients/Weights (w1, w2, w3)
     coefficients = model.coef_
     features = X_train.columns.tolist()
     print(f"{TerminalColors.GREEN}Features (Linear Regression): {features}")
@@ -180,6 +180,17 @@ def train_linear_regression(X_train, y_train, X_test, y_test):
     print("\n")
     return model, y_test_pred
 
+
+"""
+Trains a feedforward neural network (FNN) on provided data and evaluates its performance.
+
+Parameters:
+X_train, y_train: Training data.
+X_test, y_test: Testing data.
+
+Returns:
+The trained FNN model.
+"""
 def train_fnn(X_train, X_test, y_train, y_test):
     print(f"{TerminalColors.BLUE + TerminalColors.BOLD}Training ForwardFeed NN{TerminalColors.END}")
     # Define FNN architecture
@@ -221,6 +232,18 @@ def train_fnn(X_train, X_test, y_train, y_test):
     return model
 
 
+"""
+Creates a CSV file with actual and predicted values.
+
+Parameters:
+X_test (DataFrame): Test data containing features.
+y_test (array-like): Actual target values from the test data.
+predictions (array-like): Predicted target values.
+prefix (str): Prefix for the output CSV file name.
+
+Returns:
+None
+"""
 def create_prediction_csv(X_test, y_test, predictions, prefix):
     file_name = prefix + 'predictions.csv'
     results = pd.DataFrame(
@@ -229,24 +252,35 @@ def create_prediction_csv(X_test, y_test, predictions, prefix):
     print(f"Predictions saved to '{file_name}'.")
 
 
-# visualize_correlation() Function:
-# Generate data visualizations for correlation of tips and rack time.
-# Input: Preprocessed data (merged data)
-# Output: Generated data visualization of tips and their (bucketed) correlation to rack time in the dataset
+"""
+Generates visualizations to analyze the correlation between tips and rack time in a dataset.
+
+The function calculates and prints average rack times for zero and non-zero tips, 
+then creates scatterplots and line charts to visually represent the relationship 
+between rack time and tip amount, both before and after removing statistical outliers.
+It also prints statistics such as the percentage of $0 tips and the Pearson correlation 
+coefficient before and after outlier removal.
+
+Parameters:
+merged_data (DataFrame): The preprocessed dataset containing 'Tip_USD' and 'Rack_time' columns.
+
+Output:
+Displays generated plots and prints relevant statistics.
+"""
 def visualize_correlation(merged_data):
-    # calculate the average rack time when the tip is zero
+    # Calculate the average rack time when the tip is zero
     avg_rack_time_zero_tip = merged_data[merged_data['Tip_USD'] == 0]['Rack_time'].mean(
     )
     print(
         f"Average Rack Time when Tip is Zero: {avg_rack_time_zero_tip:.2f} minutes")
 
-    # calculate the average rack time when the tip is more than zero
+    # Calculate the average rack time when the tip is more than zero
     avg_rack_time_non_zero_tip = merged_data[merged_data['Tip_USD'] > 0]['Rack_time'].mean(
     )
     print(
         f"Average Rack Time when Tip is More than Zero: {avg_rack_time_non_zero_tip:.2f} minutes")
 
-    # scatterplot before removing zero-dollar tips
+    # Scatterplot before removing zero-dollar tips
     plt.figure(figsize=(10, 6))
     plt.subplot(2, 2, 1)
     sns.scatterplot(y='Rack_time', x='Tip_USD', data=merged_data)
@@ -256,7 +290,7 @@ def visualize_correlation(merged_data):
     plt.ylim(1, 50)
     plt.xlim(0, 50)
 
-    # # Line chart before removing zero-dollar tips
+    # Line chart before removing zero-dollar tips
     plt.subplot(2, 2, 2)
     sns.lineplot(y='Rack_time', x='Tip_USD', data=merged_data)
     plt.ylabel('Rack Time')
@@ -265,7 +299,7 @@ def visualize_correlation(merged_data):
     plt.ylim(1, 50)
     plt.xlim(0, 50)
 
-    # show statistics before removal
+    # Show statistics before removal
     zero_dollar_tips_percentage_before = (
         len(merged_data[merged_data['Tip_USD'] == 0]) / len(merged_data)) * 100
     correlation_coefficient_before = merged_data['Tip_USD'].corr(
@@ -277,28 +311,28 @@ def visualize_correlation(merged_data):
         f"Correlation coefficient (Pearson) between Rack Time and Tip (Before): {correlation_coefficient_before:.2f}")
     print(f"Number of data points (Before): {number_of_data_points_before}")
 
-    # remove outliers (tip values over $30)
+    # Remove outliers (tip values over $30)
     merged_data = merged_data[merged_data['Tip_USD'] <= 30]
 
-    # scatterplot after removing zero-dollar tips and outliers
+    # Scatterplot after removing zero-dollar tips and outliers
     plt.subplot(2, 2, 3)
     sns.scatterplot(y='Rack_time', x='Tip_USD', data=merged_data)
     plt.ylabel('Rack Time (secounds)')
     plt.xlabel('Tip (USD)')
     plt.title('Rack Time vs. Tip Without Statistical Outliers')
     plt.ylim(1, 50)
-    plt.xlim(0, 30)  # Updated ylim to accommodate the removal of outliers
+    plt.xlim(0, 30)
 
-    # # line chart after removing zero-dollar tips and outliers
+    # Line chart after removing zero-dollar tips and outliers
     plt.subplot(2, 2, 4)
     sns.lineplot(y='Rack_time', x='Tip_USD', data=merged_data)
     plt.ylabel('Rack Time')
     plt.xlabel('Tip (USD)')
     plt.title('Correlation between Rack Time and Tip (Line Chart) - After Removal')
     plt.ylim(1, 50)
-    plt.xlim(0, 30)  # Updated ylim to accommodate the removal of outliers
+    plt.xlim(0, 30)
 
-    # calculate statistics after removal
+    # Calculate statistics after removal
     zero_dollar_tips_percentage_after = (
         len(merged_data[merged_data['Tip_USD'] == 0]) / len(merged_data)) * 100
     correlation_coefficient_after = merged_data['Tip_USD'].corr(
@@ -315,10 +349,15 @@ def visualize_correlation(merged_data):
     plt.show()
 
 
-# visualize_tip_distribution() Function:
-# Generate data visualizations for data distribution based on tips.
-# Input: Preprocessed data (merged data)
-# Output: Generated data visualization of the distribution of tips in the dataset
+"""
+Generates a bar chart visualizing the distribution of rack times across different tip ranges.
+
+Parameters:
+merged_data (DataFrame): The preprocessed dataset with 'Tip_USD' and 'Rack_time' columns.
+
+Output:
+Displays a bar chart visualizing the distribution of rack times across tip ranges.
+"""
 def visualize_tip_distribution(merged_data):
     # Tip ranges
     tip_ranges = [0, 3, 5, 8, 12, 15, 30, float('inf')]
@@ -356,11 +395,17 @@ def visualize_tip_distribution(merged_data):
     plt.show()
 
 
-# visualize_predictions() Function:
-# Generate data visualization for linear regression model predictions compared to actual values
-# This is a method of checking accuracy and determining optimal tip vs. actual tip
-# Input: Linear regression model test data, and the predicted data
-# Output: Generated data visualization
+"""
+Plots actual vs. predicted tips to visualize the performance of a linear regression model.
+
+Parameters:
+X_test (DataFrame): Test data containing the 'total_amount_USD' feature.
+y_test (array-like): Actual tip values.
+predictions (array-like): Predicted tip values by the model.
+
+Output:
+Displays a scatter plot for actual vs. predicted tips.
+"""
 def visualize_predictions(X_test, y_test, predictions):
     plt.figure(figsize=(10, 6))
     plt.scatter(X_test['total_amount_USD'], y_test,
@@ -380,8 +425,20 @@ def visualize_predictions(X_test, y_test, predictions):
 
     plt.show()
 
+
+"""
+Calculates optimal tips based on a threshold rack time using a trained model.
+
+Parameters:
+model (Model): A trained machine learning model.
+test_input (DataFrame): Test data containing features like 'total_amount_USD' and 'Area_sqmi'.
+threshold_racktime (float): The threshold rack time used in reverse engineering the model.
+
+Returns:
+List of optimal tips calculated for each instance in the test data.
+"""
 def get_rack_time(model, test_input, threshold_racktime):
-    # save test_input to csv
+    # Save test_input to csv
     test_input.to_csv('test_input.csv', index=False)
 
     # Calculate predicted rack times for the test set
@@ -399,18 +456,22 @@ def get_rack_time(model, test_input, threshold_racktime):
     
         # Calculate the predicted Tip_USD using the weights and threshold rack time
         predicted_tip = (threshold_rack_time - (feature_weights[0]* row['total_amount_USD']) - (row['Area_sqmi']*feature_weights[2]) - intercept) / (feature_weights[1])
-        # round the predicted tip to the nearest cent
+        # Round the predicted tip to the nearest cent
         predicted_tip = round(predicted_tip, 2)
         optimal_tips.append(predicted_tip)
     return optimal_tips
 
 
-# main() Function:
-# Executes the program based on input arguments and relative data
-# Defaults to visualize (-V argument) and not save generated artifacts (-A argument) such as:
-# - Generated processed data CSVs
-# - Data visualization files
-# These defaults can be changed with input arguments in the command line.
+"""
+Main
+
+Parameters:
+visualize (bool): If True, visualizes data distributions and correlations.
+save_artifacts (bool): If True, saves processed data to CSV files.
+
+Output:
+Executes the data processing and modeling pipeline. Optionally saves data and displays visualizations.
+"""
 def main(visualize=True, save_artifacts=False):
     # Define Order and Store data CSV file locations
     order_source = 'Data/dispatch_order_data.csv'
@@ -456,20 +517,14 @@ def main(visualize=True, save_artifacts=False):
 
         # visualize the correlation of tips to rack time in raw data
         visualize_correlation(merged_data)
+        
 
-        # predict how much should be tipped for an order
-        # predictions = model.predict(X_test)
-
-        # # visualize the accuracy of model predictions
-        # visualize_predictions(X_test, y_test, predictions, accuracy, good_tip_definition, percent_good, percent_bad, percent_zero)
-
-        # Additional visualization for linear regression and neural network to be added here.
-
-
-# Add possible arguments for Python execution.
-# '-V' argument: Visualize the data for linear regression and neural network models
-# '-A' argument: Save any generated artifacts. Only CSVs at this point, to automatically
-#                save any data visualizations eventually.
+"""
+ Add possible arguments for Python execution.
+ '-V' argument: Visualize the data for linear regression and neural network models
+ '-A' argument: Save any generated artifacts. Only CSVs at this point, to automatically
+                save any data visualizations eventually.
+"""
 if __name__ == "__main__":
     import argparse
 
